@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./RegisterPage.css";
+import Cookies from "js-cookie";
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -20,6 +21,43 @@ function RegisterPage() {
     });
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    console.log("Email:", email);
+    console.log("Password:", password);
+    try {
+      const response = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      switch (response.status) {
+        case 200:
+          const data = await response.json();
+          alert("Inicio de sesión exitoso");
+          console.log(data);
+          Cookies.set("access_token", data.access_token);
+          window.location.href = "/";
+          break;
+        case 401:
+          alert("Credenciales incorrectos");
+          break;
+        default:
+          const errorData = await response.json();
+          console.error("Error en el inicio de sesión:", errorData);
+          throw new Error(errorData.message || "Error al iniciar sesión");
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
@@ -38,7 +76,7 @@ function RegisterPage() {
           lastName: formData.apellidos,
           email: formData.email,
           password: formData.password,
-          role: formData.role,
+          role: "user", // harcodeado
           city: formData.city,
           phone: formData.phone,
         }),
@@ -53,6 +91,7 @@ function RegisterPage() {
       const data = await response.json();
       alert("Registro exitoso");
       console.log(data);
+      await handleLogin(e);
     } catch (error) {
       console.error(error);
       alert("Hubo un error al registrar el usuario");
@@ -139,7 +178,9 @@ function RegisterPage() {
           onChange={handleChange}
         />
 
-        <button type="submit" className="btn-register">Registrarse</button>
+        <button type="submit" className="btn-register">
+          Registrarse
+        </button>
       </form>
     </div>
   );

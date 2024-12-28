@@ -1,16 +1,48 @@
-import React, { useState } from 'react';
-import './LoginPage.css';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import "./LoginPage.css";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
+    console.log("Email:", email);
+    console.log("Password:", password);
+    try {
+      const response = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      switch (response.status) {
+        case 200:
+          const data = await response.json();
+          alert("Inicio de sesión exitoso");
+          console.log(data);
+          Cookies.set("access_token", data.access_token);
+          window.location.href = "/";
+          break;
+        case 401:
+          alert("Credenciales incorrectos");
+          break;
+        default:
+          const errorData = await response.json();
+          console.error("Error en el inicio de sesión:", errorData);
+          throw new Error(errorData.message || "Error al iniciar sesión");
+      }
+    } catch (error) {
+      alert(error);
+    }
   };
 
   return (
@@ -57,8 +89,10 @@ function LoginPage() {
       </form>
 
       <p className="register-link">
-        ¿No tienes una cuenta?{' '}
-        <Link to="/register" className="register-link-text">Regístrate aquí</Link>
+        ¿No tienes una cuenta?{" "}
+        <Link to="/register" className="register-link-text">
+          Regístrate aquí
+        </Link>
       </p>
     </motion.div>
   );
