@@ -133,7 +133,7 @@ function Home() {
             className="event-card"
             whileHover={{ scale: 1.05 }}
           >
-            <img src="/ruta-imagen-evento" alt="Evento 1" />
+            <img src="/src/assets/imagenes/EDUCACION.jpg" alt="Evento 1" />
             <div className="event-details">
               <h3>Nombre del Evento</h3>
               <p>Fecha: DD/MM/YYYY</p>
@@ -153,7 +153,7 @@ function Home() {
             className="testimonial-card"
             whileHover={{ y: -10 }}
           >
-            <img src="/ruta-avatar" alt="Usuario" className="testimonial-avatar" />
+            <img src="/src/assets/imagenes/SALUD.jpg" alt="Usuario" className="testimonial-avatar" />
             <p className="testimonial-text">"Testimonio del usuario"</p>
             <p className="testimonial-author">Nombre del Usuario</p>
             <p className="testimonial-role">Cargo/Profesión</p>
@@ -195,7 +195,7 @@ function Home() {
         <h2>Nuestros Partners</h2>
         <div className="partners-grid">
           {/* Añadir logos de partners */}
-          <img src="/ruta-logo-partner" alt="Partner 1" className="partner-logo" />
+          <img src="/src/assets/imagenes/skyscraper-view-city-leader-window-frame.jpg" alt="Partner 1" className="partner-logo" />
           {/* Repetir para más partners */}
         </div>
       </section>
