@@ -1,15 +1,35 @@
-/* Contenedor principal */
-.login-container {
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
   background-color: #f1f9fe;
+}
+
+.login-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e2f3fc;
+}
+
+.login-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.login-container {
+  flex: 1;
+  background-color: white;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 30px;
   max-width: 400px;
-  margin: 5% auto;
   text-align: center;
 }
 
-/* Título */
 .login-title {
   font-size: 1.8rem;
   color: #134a67;
@@ -17,7 +37,6 @@
   font-weight: bold;
 }
 
-/* Grupo de formularios */
 .form-group {
   margin-bottom: 15px;
   text-align: left;
@@ -44,7 +63,6 @@ input:focus {
   outline: none;
 }
 
-/* Botón de inicio de sesión */
 .btn-login {
   width: 100%;
   padding: 12px;
@@ -62,11 +80,6 @@ input:focus {
   background-color: #1084b9;
 }
 
-.btn-login:active {
-  transform: scale(0.98);
-}
-
-/* Enlace de registro */
 .register-link {
   margin-top: 20px;
   font-size: 0.9rem;

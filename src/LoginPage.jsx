@@ -33,7 +33,7 @@ function LoginPage() {
           window.location.href = "/";
           break;
         case 401:
-          alert("Credenciales incorrectos");
+          alert("Credenciales incorrectas");
           break;
         default:
           const errorData = await response.json();
@@ -46,55 +46,65 @@ function LoginPage() {
   };
 
   return (
-    <motion.div
-      className="login-container"
-      initial={{ opacity: 0, y: -50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-    >
-      <h2 className="login-title">Inicia Sesión</h2>
-      <form className="login-form" onSubmit={handleLogin}>
-        <div className="form-group">
-          <label htmlFor="email">Correo Electrónico</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="Ingresa tu correo"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+    <div className="login-page">
+      <div className="login-image">
+        {/* Espacio para la imagen */}
+        <img
+          src="/path/to/your/image.png" // Cambia por la ruta de tu imagen
+          alt="Login Illustration"
+          className="login-img"
+        />
+      </div>
+      <motion.div
+        className="login-container"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <h2 className="login-title">Inicia Sesión</h2>
+        <form className="login-form" onSubmit={handleLogin}>
+          <div className="form-group">
+            <label htmlFor="email">Correo Electrónico</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="Ingresa tu correo"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="password">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Ingresa tu contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="password">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Ingresa tu contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        <motion.button
-          type="submit"
-          className="btn-login"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Iniciar Sesión
-        </motion.button>
-      </form>
+          <motion.button
+            type="submit"
+            className="btn-login"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Iniciar Sesión
+          </motion.button>
+        </form>
 
-      <p className="register-link">
-        ¿No tienes una cuenta?{" "}
-        <Link to="/register" className="register-link-text">
-          Regístrate aquí
-        </Link>
-      </p>
-    </motion.div>
+        <p className="register-link">
+          ¿No tienes una cuenta?{" "}
+          <Link to="/register" className="register-link-text">
+            Regístrate aquí
+          </Link>
+        </p>
+      </motion.div>
+    </div>
   );
 }
 
