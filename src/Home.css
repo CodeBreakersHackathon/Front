@@ -4,35 +4,35 @@
 
 /* Variables Globales */
 :root {
-  /* Sistema de Colores Principal */
-  --color-primary-50: #f1f9fe;
-  --color-primary-100: #e2f3fc;
-  --color-primary-200: #bfe6f8;
-  --color-primary-300: #86d3f3;
-  --color-primary-400: #46bcea;
-  --color-primary-500: #21aae1;
-  --color-primary-600: #1084b9;
-  --color-primary-700: #0e6996;
-  --color-primary-800: #10597c;
-  --color-primary-900: #134a67;
-  --color-primary-950: #0d2f44;
+  /* Sistema de Colores Principal - Ajustado para mejor contraste */
+  --color-primary-50: #f0f9fe;   /* Más claro */
+  --color-primary-100: #e0f2fc;  /* Fondo suave */
+  --color-primary-200: #bae3f7;  /* Bordes suaves */
+  --color-primary-300: #7ccbf0;  /* Elementos secundarios */
+  --color-primary-400: #43b4e9;  /* Hover states */
+  --color-primary-500: #21aae1;  /* Color principal */
+  --color-primary-600: #1a88b4;  /* Hover oscuro */
+  --color-primary-700: #156687;  /* Texto sobre blanco */
+  --color-primary-800: #11506a;  /* Títulos */
+  --color-primary-900: #0d3a4d;  /* Texto principal */
+  --color-primary-950: #082736;  /* Fondos oscuros */
 
-  /* Sistema de Colores Semánticos */
+  /* Sistema de Colores Semánticos - Ajustado para armonizar */
   --color-success-light: #ecfdf5;
   --color-success: #10b981;
   --color-success-dark: #059669;
   
   --color-warning-light: #fffbeb;
-  --color-warning: #f59e0b;
-  --color-warning-dark: #d97706;
+  --color-warning: #21aae1;      /* Armonizado con el principal */
+  --color-warning-dark: #1a88b4; /* Armonizado con el principal */
   
   --color-error-light: #fef2f2;
   --color-error: #ef4444;
   --color-error-dark: #dc2626;
   
   --color-info-light: #eff6ff;
-  --color-info: #3b82f6;
-  --color-info-dark: #2563eb;
+  --color-info: #21aae1;         /* Armonizado con el principal */
+  --color-info-dark: #1a88b4;    /* Armonizado con el principal */
 
   /* Sistema de Sombras Refinado */
   --shadow-xs: 0 1px 2px rgba(13, 47, 68, 0.05);
@@ -1888,8 +1888,8 @@ body {
   padding: var(--spacing-24) 0;
   background: linear-gradient(
     135deg,
-    var(--color-primary-600),
-    var(--color-primary-800)
+    var(--color-primary-700),
+    var(--color-primary-900)
   );
   overflow: hidden;
   color: white;
@@ -1936,7 +1936,8 @@ body {
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: var(--font-weight-extrabold);
   margin-bottom: var(--spacing-8);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
 .cta-description {
@@ -1977,7 +1978,7 @@ body {
   padding: var(--spacing-4) var(--spacing-8);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-primary-600);
+  color: var(--color-primary-700);
   background: white;
   border-radius: var(--border-radius-full);
   transition: all 0.3s var(--transition-timing);

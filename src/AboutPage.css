@@ -1,25 +1,25 @@
 /* Variables específicas para AboutPage */
 .about-page {
-  /* Colores principales mejorados para mejor contraste */
-  --about-primary: #0090ea;
-  --about-primary-dark: #0072b8;
-  --about-primary-light: #e6f4fc;
-  --about-primary-lighter: #f5fbff;
-  
-  /* Colores de texto con mejor contraste */
-  --about-text-dark: #0a2942;
-  --about-text-medium: #0d3d63;
-  --about-text-light: #245980;
-  
-  /* Colores de fondo y overlay */
-  --about-bg-overlay: rgba(10, 41, 66, 0.7);
+  /* Colores principales alineados con Home.css */
+  --about-primary: #21aae1;           /* Color principal */
+  --about-primary-dark: #1a88b4;      /* Hover y elementos oscuros */
+  --about-primary-light: #e0f2fc;     /* Fondos claros y bordes */
+  --about-primary-lighter: #f0f9fe;   /* Fondos muy claros */
+
+  /* Colores de texto ajustados para mejor contraste */
+  --about-text-dark: #0d3a4d;         /* Títulos y texto principal */
+  --about-text-medium: #11506a;       /* Subtítulos */
+  --about-text-light: #156687;        /* Texto secundario */
+
+  /* Colores de fondo y overlay con nueva paleta */
+  --about-bg-overlay: rgba(13, 58, 77, 0.7);
   --about-bg-card: rgba(255, 255, 255, 0.95);
-  
-  /* Gradientes mejorados */
-  --about-gradient-primary: linear-gradient(135deg, #0090ea 0%, #0072b8 100%);
-  --about-gradient-dark: linear-gradient(135deg, #0a2942 0%, #0d3d63 100%);
-  --about-gradient-light: linear-gradient(180deg, #ffffff 0%, var(--about-primary-light) 100%);
-  
+
+  /* Gradientes actualizados */
+  --about-gradient-primary: linear-gradient(135deg, #21aae1 0%, #1a88b4 100%);
+  --about-gradient-dark: linear-gradient(135deg, #0d3a4d 0%, #11506a 100%);
+  --about-gradient-light: linear-gradient(180deg, #ffffff 0%, #e0f2fc 100%);
+
   /* Sombras refinadas */
   --about-shadow-sm: 0 2px 4px rgba(10, 41, 66, 0.05);
   --about-shadow-md: 0 4px 16px rgba(10, 41, 66, 0.1);
