@@ -21,25 +21,39 @@ const AnimatedCounter = ({ value, duration = 2 }) => {
 
   useEffect(() => {
     let startTime;
+    let animationFrameId;
+
     const animateCount = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
       setCount(Math.floor(progress * value));
+      
       if (progress < 1) {
-        requestAnimationFrame(animateCount);
+        animationFrameId = requestAnimationFrame(animateCount);
       }
     };
-    requestAnimationFrame(animateCount);
+
+    animationFrameId = requestAnimationFrame(animateCount);
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   }, [value, duration]);
 
-  return <span>{count.toLocaleString()}+</span>;
+  return (
+    <span className="optimize-animation">
+      {count.toLocaleString()}+
+    </span>
+  );
 };
 
 // Componente para las tarjetas de estadísticas
 const StatCard = ({ icon: Icon, value, label }) => {
   return (
     <motion.div
-      className="stat-card"
+      className="stat-card hardware-accelerated"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -112,9 +126,16 @@ function AboutPage() {
     }
   };
   return (
-    <div className="about-container">
-      {/* Hero Section Mejorado */}
-      <section className="about-hero">
+    <div className="about-page">
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-background">
+          <motion.div
+            className="hero-shape hardware-accelerated"
+            style={{ scale }}
+          />
+        </div>
+
         <motion.div
           className="hero-content"
           variants={containerVariants}
@@ -122,32 +143,32 @@ function AboutPage() {
           animate="visible"
         >
           <motion.h1 
-            className="about-title"
+            className="hero-title"
             variants={itemVariants}
           >
-            Transformando la Educación Digital
+            Transformando la
+            <span className="text-gradient"> Educación Digital</span>
           </motion.h1>
+
           <motion.p 
-            className="about-subtitle"
+            className="hero-subtitle"
             variants={itemVariants}
           >
             Conectando personas con conocimiento a través de la tecnología
           </motion.p>
+
           <motion.div 
             className="hero-stats"
             variants={containerVariants}
           >
             {stats.map((stat, index) => (
-              <StatCard key={index} {...stat} />
+              <StatCard 
+                key={index}
+                {...stat}
+              />
             ))}
           </motion.div>
         </motion.div>
-        <div className="hero-background">
-          <motion.div
-            className="hero-shape"
-            style={{ scale }}
-          />
-        </div>
       </section>
 
       {/* Sección de Misión y Visión */}
