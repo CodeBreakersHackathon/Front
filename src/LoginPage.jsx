@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import "./LoginPage.css";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useAuth } from "./AuthContext"; // Importa el contexto de autenticación
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth(); // Extrae la función de inicio de sesión del contexto
+  const navigate = useNavigate(); // Hook para redireccionar
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -29,8 +32,9 @@ function LoginPage() {
           const data = await response.json();
           alert("Inicio de sesión exitoso");
           console.log(data);
-          Cookies.set("access_token", data.access_token);
-          window.location.href = "/";
+          Cookies.set("access_token", data.access_token); // Guarda el token en las cookies
+          login(); // Actualiza el estado global de autenticación
+          navigate("/"); // Redirige al home
           break;
         case 401:
           alert("Credenciales incorrectas");
