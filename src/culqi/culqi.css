@@ -1,0 +1,50 @@
+#only-charge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  #only-charge h1 {
+    font-size: 1.5rem; /* 2xl */
+    font-weight: 600; /* font-semibold */
+  }
+  
+  #only-charge p {
+    font-size: 1.125rem; /* lg */
+    font-weight: 600; /* font-semibold */
+  }
+  
+  #only-charge .button-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2.5rem; /* mt-10 */
+  }
+  
+  #crearCharge {
+    padding: 0.625rem 1.25rem; /* px-5 py-2 */
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 600; /* font-semibold */
+    line-height: 1.25rem; /* leading-5 */
+    color: white; /* text-white */
+    background-color: #7e22ce; /* bg-purple-500 */
+    border-radius: 9999px; /* rounded-full */
+    transition: background-color 0.3s;
+  }
+  
+  #crearCharge:hover {
+    background-color: #5b21b6; /* hover:bg-purple-700 */
+  }
+  
+  #only-charge .response-container {
+    display: flex;
+    width: 100%; /* w-full */
+    margin-top: 2.5rem; /* mt-10 */
+    min-width: 200px; /* min-w-[200px] */
+    justify-content: flex-start;
+  }
+  
+  #only-charge .response-container span {
+    margin-right: 2.5rem; /* mr-10 */
+  }
