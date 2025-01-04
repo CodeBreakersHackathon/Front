@@ -12,6 +12,7 @@ import RegisterPage from "./RegisterPage.jsx";
 import { AuthProvider } from "./AuthContext";
 import ClassesPage from "./ClassesPage"; // Importa la página de clases
 import ClassDetails from "./ClassDetails"; // Importar la página de detalles de clase
+import OnlyCharge from "./culqi/pages/CulqiComponents.tsx";
 // import MyClassesPage from "./MyClassesPage"; // Importar la página de clases suscritas
 import ClassView from "./ClassView";
 
@@ -37,6 +38,7 @@ function App() {
         <Navbar isAuthenticated={isAuthenticated} /> {/* Pasamos el estado al Navbar */}
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/culqi" element={<OnlyCharge />} />
           <Route path="/nosotros" element={<AboutPage />} />
           <Route path="/servicios" element={<ServicesPage />} />
           <Route path="/contacto" element={<ContactPage />} />
