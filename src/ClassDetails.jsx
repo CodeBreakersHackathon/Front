@@ -48,24 +48,24 @@ const ClassDetails = () => {
       });
   }, [id]); // Solo se ejecuta cuando el ID de la clase cambia
 
-  const handleSubscribe = () => {
-    if (userId) {
-      // Llamar a la API de suscripción usando el userId
-      axios
-        .post(`http://localhost:3000/tickets/${id}/subscribe`, { userId })
-        .then((response) => {
-          setMessage('Te has suscrito a la clase exitosamente.');
-          // Redirigir a la página donde el usuario pueda ver la clase grabada
-          navigate(`/class/${id}/view`);
-        })
-        .catch((error) => {
-          console.error('Error subscribing to the class:', error);
-          setMessage('Ocurrió un error al intentar suscribirte a la clase.');
-        });
+  // En tu función de manejo del subscribe (por ejemplo, handleSubscribe)
+const handleSubscribe = async () => {
+  try {
+    // Tu lógica de suscripción
+    await axios.post('http://localhost:3000/tickets/1/subscribe', { /* datos */ });
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      // Si el error es un 400, puedes manejarlo aquí
+      alert('Ya estás suscrito a este curso');
     } else {
-      setMessage('No estás logueado. Por favor, inicia sesión.');
+      // Manejo general de otros errores
+      alert('Hubo un problema al intentar suscribirte');
     }
-  };
+  }
+};
+
+  
+  
 
   if (!classDetails) {
     return <p>Cargando detalles de la clase...</p>;
