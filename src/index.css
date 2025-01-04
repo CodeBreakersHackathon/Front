@@ -1,4 +1,5 @@
 /* Reset general */
+
 * {
   margin: 0;
   padding: 0;
@@ -7,10 +8,14 @@
 
 /* Tipografía y colores globales */
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: #f1f9fe; /* Fondo principal claro */
   color: #134a67; /* Texto base oscuro */
   line-height: 1.6;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 /* Estilo de enlaces */
@@ -38,7 +43,12 @@ button:hover {
 }
 
 /* Títulos */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: #0e6996;
 }
 

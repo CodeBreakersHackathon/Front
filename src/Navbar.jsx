@@ -29,7 +29,10 @@ function Navbar() {
           setUserId(decodedToken.sub); // Establece el userId
         }
       } catch (error) {
-        console.error("Error al analizar los datos del usuario desde localStorage:", error);
+        console.error(
+          "Error al analizar los datos del usuario desde localStorage:",
+          error
+        );
       }
     }
   }, []);
@@ -46,6 +49,14 @@ function Navbar() {
       alert("Debes iniciar sesión para acceder a tus cursos."); // Muestra un mensaje si no hay userId
     }
   };
+
+  const goToMisClases = () => {
+    navigate(`/course`); //redirige a "Mis Clases"
+  };
+  const goToPerfil = () => {
+    navigate(`/profile`); // redirige a "Mi Perfil"
+  };
+
 
   return (
     <nav className="barra-navegacion">
@@ -81,19 +92,20 @@ function Navbar() {
       <div className="botones-navegacion">
         {isLoggedIn ? (
           <>
-            <Link to="/live-updates">Actualizaciones en vivo</Link>
-            <Link to="/course" className="btn-ver-clases">
+            <button onClick={goToMisClases} className="btn-ver-clases">
               Ver Clases
-            </Link>
+            </button>
             <button onClick={goToMisCursos} className="btn-mis-cursos">
               Mis Cursos
             </button>
-            <Link to="/profile" className="btn-ver-perfil">
+            <button onClick={goToPerfil} className="btn-ver-perfil">
               Ver Perfil
-            </Link>
+            </button>
             <button onClick={handleLogout} className="btn-cerrar-sesion">
               Cerrar Sesión
             </button>
+
+            
           </>
         ) : (
           <>
