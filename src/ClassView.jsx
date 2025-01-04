@@ -3,45 +3,50 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const ClassView = () => {
-  const { id } = useParams(); // Obtener el ID de la clase desde la URL
-  const [classDetails, setClassDetails] = useState(null);
+  const { id } = useParams(); // Obtener el ID del curso desde la URL
+  const [classDetails, setClassDetails] = useState([]); // Estado para manejar las clases
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    // Llamar a la API para obtener los detalles de la clase grabada
+    // Llamar a la API para obtener las clases del curso
     axios
-      .get(`http://localhost:3000/course/${id}/view`) // Ruta para obtener los detalles de la clase grabada
+      .get(`http://localhost:3000/classes/course/${id}`)
       .then((response) => {
-        setClassDetails(response.data); // Guardar los detalles de la clase en el estado
+        setClassDetails(response.data); // Guardar las clases en el estado
       })
       .catch((error) => {
-        console.error('Error fetching class view:', error);
-        setMessage('No se pudo cargar la clase grabada.');
+        console.error('Error fetching classes:', error);
+        setMessage('No se pudieron cargar las clases de este curso.');
       });
   }, [id]);
 
-  if (!classDetails) {
-    return <p>Cargando información de la clase grabada...</p>;
+  if (classDetails.length === 0) {
+    return <p>Cargando información de las clases...</p>;
   }
 
   return (
     <div className="class-view">
-      <h2>{classDetails.name}</h2>
-      <p>{classDetails.description}</p>
-      <p>Duración: {classDetails.duration}</p>
-      <p>Instructor: {classDetails.instructor}</p>
-
-      {/* Suponiendo que la clase grabada es un video */}
-      <div className="video-container">
-        {classDetails.videoUrl ? (
-          <video width="100%" controls>
-            <source src={classDetails.videoUrl} type="video/mp4" />
-            Tu navegador no soporta el formato de video.
-          </video>
-        ) : (
-          <p>No hay video disponible para esta clase.</p>
-        )}
-      </div>
+      <h2>Clases del Curso</h2>
+      {classDetails.map((classItem) => (
+        <div key={classItem.id} className="class-item">
+          <h3>{classItem.title}</h3>
+          <p>{classItem.description}</p>
+          <p>Duración: {classItem.duration}</p>
+          <div className="video-container">
+            {classItem.videoUrl ? (
+              <video width="100%" controls>
+                <source
+                  src={`http://localhost:3000${classItem.videoUrl}`}
+                  type="video/mp4"
+                />
+                Tu navegador no soporta el formato de video.
+              </video>
+            ) : (
+              <p>No hay video disponible para esta clase.</p>
+            )}
+          </div>
+        </div>
+      ))}
 
       {message && <p>{message}</p>}
     </div>

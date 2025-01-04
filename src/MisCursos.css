@@ -1,0 +1,32 @@
+/* MisCursos.css */
+.mis-cursos {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .mis-cursos h2 {
+    color: #333;
+  }
+  
+  .mis-cursos ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .mis-cursos li {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .mis-cursos li h3 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .mis-cursos li p {
+    color: #666;
+  }
+  

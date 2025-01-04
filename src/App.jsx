@@ -15,6 +15,7 @@ import ClassDetails from "./ClassDetails"; // Importar la página de detalles de
 import OnlyCharge from "./culqi/pages/CulqiComponents.tsx";
 // import MyClassesPage from "./MyClassesPage"; // Importar la página de clases suscritas
 import ClassView from "./ClassView";
+import MisCursos from "./MisCursos"; // Página para mostrar los cursos
 
 
 
@@ -46,6 +47,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/course" element={<ClassesPage />} /> {/* Ruta de clases */}
           <Route path="/course/:id" element={<ClassDetails />} />{/* Ruta para los detalles de la clase */}
+          <Route path="/tickets/user/:userId/courses" element={<MisCursos />} />
           {/* <Route path="/mis-clases" element={<MyClassesPage />} /> */}
           <Route path="/class/:id/view" element={<ClassView />} />
         </Routes>
