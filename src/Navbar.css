@@ -1,6 +1,6 @@
 /* Barra de navegación */
 .barra-navegacion {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   width: 100%;
@@ -15,8 +15,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
   color: white;
 }
-
-
 
 /* Logo */
 .logo-navegacion {
