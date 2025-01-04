@@ -7,7 +7,7 @@ import logo from "./assets/logo/logo2.png";
 // Función para decodificar el JWT
 const decodeJWT = (token) => {
   if (!token) return null;
-  const payload = token.split('.')[1];
+  const payload = token.split(".")[1];
   const decoded = JSON.parse(atob(payload)); // Decodifica y parsea el payload
   return decoded; // Retorna el payload decodificado
 };
@@ -29,7 +29,10 @@ function Navbar() {
           setUserId(decodedToken.sub); // Establece el userId
         }
       } catch (error) {
-        console.error("Error al analizar los datos del usuario desde localStorage:", error);
+        console.error(
+          "Error al analizar los datos del usuario desde localStorage:",
+          error
+        );
       }
     }
   }, []);
@@ -45,6 +48,14 @@ function Navbar() {
     } else {
       alert("Debes iniciar sesión para acceder a tus cursos."); // Muestra un mensaje si no hay userId
     }
+  };
+
+  const goToMisClases = () => {
+    navigate(`/course`); //redirige a "Mis Clases"
+  };
+
+  const goToPerfil = () => {
+    navigate(`/profile`); // redirige a "Mi Perfil"
   };
 
   return (
@@ -81,15 +92,15 @@ function Navbar() {
       <div className="botones-navegacion">
         {isLoggedIn ? (
           <>
-            <Link to="/course" className="btn-ver-clases">
+            <button onClick={goToMisClases} className="btn-ver-clases">
               Ver Clases
-            </Link>
+            </button>
             <button onClick={goToMisCursos} className="btn-mis-cursos">
               Mis Cursos
             </button>
-            <Link to="/profile" className="btn-ver-perfil">
+            <button onClick={goToPerfil} className="btn-ver-perfil">
               Ver Perfil
-            </Link>
+            </button>
             <button onClick={handleLogout} className="btn-cerrar-sesion">
               Cerrar Sesión
             </button>
