@@ -81,6 +81,7 @@ function Navbar() {
       <div className="botones-navegacion">
         {isLoggedIn ? (
           <>
+            <Link to="/live-updates">Actualizaciones en vivo</Link>
             <Link to="/course" className="btn-ver-clases">
               Ver Clases
             </Link>

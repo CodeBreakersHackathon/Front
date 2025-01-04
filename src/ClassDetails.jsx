@@ -16,6 +16,8 @@ const ClassDetails = () => {
   const [classDetails, setClassDetails] = useState(null);
   const [userId, setUserId] = useState(null); // Almacenamos el userId obtenido desde el token
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
     // Obtener el userId del localStorage
@@ -49,22 +51,73 @@ const ClassDetails = () => {
   }, [id]); // Solo se ejecuta cuando el ID de la clase cambia
 
   // En tu función de manejo del subscribe (por ejemplo, handleSubscribe)
-const handleSubscribe = async () => {
-  try {
-    // Tu lógica de suscripción
-    await axios.post('http://localhost:3000/tickets/1/subscribe', { /* datos */ });
-  } catch (error) {
-    if (error.response && error.response.status === 400) {
-      // Si el error es un 400, puedes manejarlo aquí
-      alert('Ya estás suscrito a este curso');
-    } else {
-      // Manejo general de otros errores
-      alert('Hubo un problema al intentar suscribirte');
-    }
-  }
-};
-
+  const handleSubscribe = async () => {
+    setIsLoading(true);
+    try {
+      // Verificar que tenemos el userId
+      if (!userId) {
+        alert('Necesitas iniciar sesión para suscribirte');
+        navigate('/login');
+        return;
+      }
   
+      // Obtener el token del localStorage
+      const userDataString = localStorage.getItem('userData');
+      if (!userDataString) {
+        alert('Necesitas iniciar sesión para suscribirte');
+        navigate('/login');
+        return;
+      }
+  
+      const userData = JSON.parse(userDataString);
+      const token = userData.access_token;
+  
+      // Hacer la petición POST con la ruta correcta
+      const response = await axios.post(
+        `http://localhost:3000/tickets/${id}/subscribe`, // id es el courseId de useParams
+        {
+          userId: userId // Enviamos solo el userId en el body
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+  
+      if (response.status === 201 || response.status === 200) {
+        setMessage('¡Te has suscrito exitosamente al curso!');
+        setTimeout(() => {
+          navigate('/mis-cursos');
+        }, 2000);
+      }
+  
+    } catch (error) {
+      console.error('Error en la suscripción:', error);
+  
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            setMessage('Ya estás suscrito a este curso');
+            break;
+          case 401:
+            setMessage('Necesitas iniciar sesión nuevamente');
+            navigate('/login');
+            break;
+          case 404:
+            setMessage('Curso no encontrado');
+            break;
+          default:
+            setMessage('Hubo un error al procesar tu suscripción');
+        }
+      } else {
+        setMessage('Error de conexión. Por favor, intenta más tarde');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
   
 
   if (!classDetails) {
@@ -77,8 +130,12 @@ const handleSubscribe = async () => {
       <p>{classDetails.description}</p>
       <p>Duración: {classDetails.duration}</p>
       <p>Instructor: {classDetails.instructor}</p>
-      <button onClick={handleSubscribe} className="btn-suscribirse">
-        Suscribirse
+      <button 
+        onClick={handleSubscribe} 
+        className="btn-suscribirse"
+        disabled={isLoading}
+      >
+        {isLoading ? 'Procesando...' : 'Suscribirse'}
       </button>
       {message && <p>{message}</p>}
     </div>

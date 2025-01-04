@@ -16,6 +16,10 @@ import OnlyCharge from "./culqi/pages/CulqiComponents.tsx";
 // import MyClassesPage from "./MyClassesPage"; // Importar la página de clases suscritas
 import ClassView from "./ClassView";
 import MisCursos from "./MisCursos"; // Página para mostrar los cursos
+import LiveUpdates from "./LiveUpdates"; // Asegúrate de que la ruta sea correcta
+// import LiveStream from './LiveStream';
+import LiveStreamEmitter from './LiveStreamEmitter'; // Transmisor
+import LiveStreamViewer from './LiveStreamViewer'; // Espectador
 
 
 
@@ -50,6 +54,14 @@ function App() {
           <Route path="/tickets/user/:userId/courses" element={<MisCursos />} />
           {/* <Route path="/mis-clases" element={<MyClassesPage />} /> */}
           <Route path="/class/:id/view" element={<ClassView />} />
+          <Route path="/live-updates" element={<LiveUpdates />} />
+          {/* <Route path="/live-stream" element={<LiveStream />} /> */}
+          {/* Ruta para el transmisor */}
+          <Route path="/transmisor" element={<LiveStreamEmitter />} />
+
+          {/* Ruta para el espectador */}
+          <Route path="/espectador" element={<LiveStreamViewer />} />
+
         </Routes>
       </AuthProvider>
     </Router>
