@@ -13,6 +13,7 @@ import { AuthProvider } from "./AuthContext";
 import ClassesPage from "./ClassesPage"; // Importa la página de clases
 import ClassDetails from "./ClassDetails"; // Importar la página de detalles de clase
 // import MyClassesPage from "./MyClassesPage"; // Importar la página de clases suscritas
+import ClassView from "./ClassView";
 
 
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/course" element={<ClassesPage />} /> {/* Ruta de clases */}
           <Route path="/course/:id" element={<ClassDetails />} />{/* Ruta para los detalles de la clase */}
           {/* <Route path="/mis-clases" element={<MyClassesPage />} /> */}
+          <Route path="/class/:id/view" element={<ClassView />} />
         </Routes>
       </AuthProvider>
     </Router>

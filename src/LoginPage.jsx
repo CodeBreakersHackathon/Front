@@ -15,6 +15,7 @@ function LoginPage() {
     e.preventDefault();
     console.log("Email:", email);
     console.log("Password:", password);
+  
     try {
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
@@ -26,19 +27,28 @@ function LoginPage() {
           password: password,
         }),
       });
-
+  
       switch (response.status) {
         case 200:
           const data = await response.json();
           alert("Inicio de sesión exitoso");
           console.log(data);
-          Cookies.set("access_token", data.access_token); // Guarda el token en las cookies
+  
+          // Guarda el token y los datos del usuario en localStorage
+          localStorage.setItem("token", data.access_token);  // Guarda solo el token
+          localStorage.setItem("userData", JSON.stringify({ access_token: data.access_token, user: data.user })); // Guarda los datos completos del usuario (incluyendo access_token)
+  
+          // Opcional: Guarda el token en cookies
+          Cookies.set("access_token", data.access_token);
+  
           login(); // Actualiza el estado global de autenticación
           navigate("/"); // Redirige al home
           break;
+  
         case 401:
           alert("Credenciales incorrectas");
           break;
+  
         default:
           const errorData = await response.json();
           console.error("Error en el inicio de sesión:", errorData);
@@ -48,6 +58,8 @@ function LoginPage() {
       alert(error);
     }
   };
+  
+  
 
   return (
     <div className="login-page">
