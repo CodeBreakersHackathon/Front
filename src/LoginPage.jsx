@@ -13,9 +13,7 @@ function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
-  
+    
     try {
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
@@ -28,37 +26,45 @@ function LoginPage() {
         }),
       });
   
-      switch (response.status) {
-        case 200:
-          const data = await response.json();
-          alert("Inicio de sesión exitoso");
-          console.log(data);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
   
-          // Guarda el token y los datos del usuario en localStorage
-          localStorage.setItem("token", data.access_token);  // Guarda solo el token
-          localStorage.setItem("userData", JSON.stringify({ access_token: data.access_token, user: data.user })); // Guarda los datos completos del usuario (incluyendo access_token)
+      const data = await response.json();
+      const { access_token } = data;
+      
+      if (access_token) {
+        // Decodificar el token JWT para obtener la información del usuario
+        const tokenParts = access_token.split('.');
+        const tokenPayload = JSON.parse(atob(tokenParts[1]));
+        
+        // Extraer userId del campo 'sub' del token
+        const userId = tokenPayload.sub;
+        
+        console.log("Token payload:", tokenPayload);
+        console.log("User ID from token:", userId);
   
-          // Opcional: Guarda el token en cookies
-          Cookies.set("access_token", data.access_token);
+        const userData = {
+          access_token,
+          userId,
+          // Por ahora no tenemos el role, necesitarás agregarlo en el backend
+        };
   
-          login(); // Actualiza el estado global de autenticación
-          navigate("/"); // Redirige al home
-          break;
+        localStorage.setItem("token", access_token);
+        localStorage.setItem("userData", JSON.stringify(userData));
+        
+        Cookies.set("access_token", access_token);
   
-        case 401:
-          alert("Credenciales incorrectas");
-          break;
-  
-        default:
-          const errorData = await response.json();
-          console.error("Error en el inicio de sesión:", errorData);
-          throw new Error(errorData.message || "Error al iniciar sesión");
+        login();
+        navigate("/");
+      } else {
+        throw new Error("No se ha recibido el token de acceso");
       }
     } catch (error) {
-      alert(error);
+      console.error("Error during login:", error);
+      alert(error.message);
     }
   };
-  
   
 
   return (
