@@ -1,25 +1,56 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Añadir useNavigate
-import axios from "axios"; // Usamos axios para obtener los cursos
+import { useNavigate } from "react-router-dom"; // Ya no necesitamos useParams
+import axios from "axios";
 import "./MisCursos.css";
 
 const MisCursos = () => {
-  const { userId } = useParams(); // Extraemos el userId de la URL
-  const navigate = useNavigate(); // Inicializamos useNavigate
+  const navigate = useNavigate();
   const [cursos, setCursos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Obtener userId del localStorage
+  const getUserId = () => {
+    const userDataString = localStorage.getItem("userData");
+    if (!userDataString) {
+      return null;
+    }
+    try {
+      const userData = JSON.parse(userDataString);
+      return userData.userId;
+    } catch (error) {
+      console.error("Error parsing user data:", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const fetchCursos = async () => {
-      try {
-        // Realiza la solicitud HTTP a la API
-        const response = await axios.get(`http://localhost:3000/tickets/user/${userId}/courses`);
-        
-        // Verifica la respuesta completa
-        console.log(response.data);
+      const userId = getUserId();
+      
+      if (!userId) {
+        setError("No se encontró información del usuario. Por favor, inicia sesión nuevamente.");
+        setLoading(false);
+        return;
+      }
 
-        // Asegúrate de que la respuesta es un arreglo
+      try {
+        // Obtener el token de acceso
+        const token = localStorage.getItem("token");
+        
+        // Realizar la solicitud HTTP a la API con el token
+        const response = await axios.get(
+          `http://localhost:3000/tickets/user/${userId}/courses`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+        
+        console.log("Usuario ID:", userId);
+        console.log("Respuesta completa:", response.data);
+
         if (Array.isArray(response.data)) {
           setCursos(response.data);
         } else {
@@ -28,16 +59,21 @@ const MisCursos = () => {
 
         setLoading(false);
       } catch (err) {
+        console.error("Error al obtener los cursos:", err);
         setError("Hubo un error al obtener los cursos.");
         setLoading(false);
+        
+        // Si el error es de autenticación, redirigir al login
+        if (err.response && err.response.status === 401) {
+          navigate("/login");
+        }
       }
     };
 
     fetchCursos();
-  }, [userId]);
+  }, []); // Ya no dependemos de userId como prop
 
   const handleVerClases = (cursoId) => {
-    // Redirige al usuario a la página de clases del curso
     navigate(`/class/${cursoId}/view`);
   };
 
@@ -60,7 +96,10 @@ const MisCursos = () => {
             <li key={curso.id}>
               <h3>{curso.name}</h3>
               <p>{curso.description}</p>
-              <button onClick={() => handleVerClases(curso.id)} className="btn-ver-clases">
+              <button 
+                onClick={() => handleVerClases(curso.id)} 
+                className="btn-ver-clases"
+              >
                 Ver Clases
               </button>
             </li>

@@ -11,8 +11,8 @@ import {
   BookOpen,
   Award,
   ArrowRight,
-  CheckCircle2
-} from 'lucide-react';
+  CheckCircle2,
+} from "lucide-react";
 import "./AboutPage.css";
 
 // Componente para los números animados
@@ -27,7 +27,7 @@ const AnimatedCounter = ({ value, duration = 2 }) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
       setCount(Math.floor(progress * value));
-      
+
       if (progress < 1) {
         animationFrameId = requestAnimationFrame(animateCount);
       }
@@ -42,11 +42,7 @@ const AnimatedCounter = ({ value, duration = 2 }) => {
     };
   }, [value, duration]);
 
-  return (
-    <span className="optimize-animation">
-      {count.toLocaleString()}+
-    </span>
-  );
+  return <span className="optimize-animation">{count.toLocaleString()}+</span>;
 };
 
 // Componente para las tarjetas de estadísticas
@@ -76,7 +72,7 @@ const stats = [
   { icon: Users, value: 50000, label: "Usuarios Activos" },
   { icon: GraduationCap, value: 1000, label: "Eventos Realizados" },
   { icon: Globe, value: 120, label: "Países Alcanzados" },
-  { icon: Award, value: 95, label: "Satisfacción %" }
+  { icon: Award, value: 95, label: "Satisfacción %" },
 ];
 
 // Datos del timeline
@@ -84,46 +80,48 @@ const timeline = [
   {
     year: "2020",
     title: "Fundación de Handin",
-    description: "Comenzamos con la visión de democratizar la educación digital."
+    description:
+      "Comenzamos con la visión de democratizar la educación digital.",
   },
   {
     year: "2021",
     title: "Expansión Global",
-    description: "Alcanzamos presencia en más de 50 países."
+    description: "Alcanzamos presencia en más de 50 países.",
   },
   {
     year: "2022",
     title: "Innovación Tecnológica",
-    description: "Implementamos IA para personalizar la experiencia de aprendizaje."
+    description:
+      "Implementamos IA para personalizar la experiencia de aprendizaje.",
   },
   {
     year: "2023",
     title: "Comunidad Global",
-    description: "Superamos los 50,000 usuarios activos."
-  }
+    description: "Superamos los 50,000 usuarios activos.",
+  },
 ];
 
 function AboutPage() {
   const { scrollYProgress } = useScroll();
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.5]);
-  
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         delayChildren: 0.3,
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
-      opacity: 1
-    }
+      opacity: 1,
+    },
   };
   return (
     <div className="about-page">
@@ -142,30 +140,18 @@ function AboutPage() {
           initial="hidden"
           animate="visible"
         >
-          <motion.h1 
-            className="hero-title"
-            variants={itemVariants}
-          >
-            Transformando la
+          <motion.h1 className="hero-title" variants={itemVariants}>
+            Transformando la &nbsp;
             <span className="text-gradient"> Educación Digital</span>
           </motion.h1>
 
-          <motion.p 
-            className="hero-subtitle"
-            variants={itemVariants}
-          >
+          <motion.p className="hero-subtitle" variants={itemVariants}>
             Conectando personas con conocimiento a través de la tecnología
           </motion.p>
 
-          <motion.div 
-            className="hero-stats"
-            variants={containerVariants}
-          >
+          <motion.div className="hero-stats" variants={containerVariants}>
             {stats.map((stat, index) => (
-              <StatCard 
-                key={index}
-                {...stat}
-              />
+              <StatCard key={index} {...stat} />
             ))}
           </motion.div>
         </motion.div>
@@ -184,9 +170,14 @@ function AboutPage() {
               <Target size={40} />
             </div>
             <h2>Nuestra Misión</h2>
-            <p>Democratizar el acceso al conocimiento mediante una plataforma innovadora que conecte a expertos con estudiantes de todo el mundo, facilitando el aprendizaje continuo y el desarrollo profesional.</p>
+            <p>
+              Democratizar el acceso al conocimiento mediante una plataforma
+              innovadora que conecte a expertos con estudiantes de todo el
+              mundo, facilitando el aprendizaje continuo y el desarrollo
+              profesional.
+            </p>
           </motion.div>
-          
+
           <motion.div
             className="vision-card"
             initial={{ opacity: 0, x: 50 }}
@@ -197,13 +188,18 @@ function AboutPage() {
               <Lightbulb size={40} />
             </div>
             <h2>Nuestra Visión</h2>
-            <p>Ser la plataforma líder global en educación digital, revolucionando la manera en que las personas aprenden y se conectan, creando un impacto positivo en la sociedad a través del conocimiento compartido.</p>
+            <p>
+              Ser la plataforma líder global en educación digital,
+              revolucionando la manera en que las personas aprenden y se
+              conectan, creando un impacto positivo en la sociedad a través del
+              conocimiento compartido.
+            </p>
           </motion.div>
         </div>
       </section>
-{/* Sección de Valores */}
-<section className="values-section">
-        <motion.h2 
+      {/* Sección de Valores */}
+      <section className="values-section">
+        <motion.h2
           className="section-title"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -211,7 +207,7 @@ function AboutPage() {
         >
           Nuestros Valores
         </motion.h2>
-        
+
         <div className="values-grid">
           <motion.div
             className="value-card"
@@ -222,7 +218,10 @@ function AboutPage() {
           >
             <Heart className="value-icon" />
             <h3>Pasión por la Educación</h3>
-            <p>Creemos en el poder transformador del conocimiento y su capacidad para cambiar vidas.</p>
+            <p>
+              Creemos en el poder transformador del conocimiento y su capacidad
+              para cambiar vidas.
+            </p>
           </motion.div>
 
           <motion.div
@@ -235,7 +234,10 @@ function AboutPage() {
           >
             <Puzzle className="value-icon" />
             <h3>Innovación Constante</h3>
-            <p>Buscamos continuamente nuevas formas de mejorar la experiencia de aprendizaje.</p>
+            <p>
+              Buscamos continuamente nuevas formas de mejorar la experiencia de
+              aprendizaje.
+            </p>
           </motion.div>
 
           <motion.div
@@ -248,7 +250,10 @@ function AboutPage() {
           >
             <Globe className="value-icon" />
             <h3>Accesibilidad Global</h3>
-            <p>Trabajamos para hacer la educación accesible para todos, sin importar su ubicación.</p>
+            <p>
+              Trabajamos para hacer la educación accesible para todos, sin
+              importar su ubicación.
+            </p>
           </motion.div>
 
           <motion.div
@@ -261,14 +266,17 @@ function AboutPage() {
           >
             <Users className="value-icon" />
             <h3>Comunidad Colaborativa</h3>
-            <p>Fomentamos un ambiente de aprendizaje colaborativo y de apoyo mutuo.</p>
+            <p>
+              Fomentamos un ambiente de aprendizaje colaborativo y de apoyo
+              mutuo.
+            </p>
           </motion.div>
         </div>
       </section>
 
       {/* Timeline Section */}
       <section className="timeline-section">
-        <motion.h2 
+        <motion.h2
           className="section-title"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -297,9 +305,9 @@ function AboutPage() {
           ))}
         </div>
       </section>
-{/* Impact Section */}
-<section className="impact-section">
-        <motion.div 
+      {/* Impact Section */}
+      <section className="impact-section">
+        <motion.div
           className="impact-content"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -307,22 +315,16 @@ function AboutPage() {
         >
           <h2 className="section-title">Nuestro Impacto</h2>
           <div className="impact-grid">
-            <motion.div 
-              className="impact-card"
-              whileHover={{ scale: 1.05 }}
-            >
+            <motion.div className="impact-card" whileHover={{ scale: 1.05 }}>
               <BookOpen className="impact-icon" />
               <h3>
-                <AnimatedCounter value={1000} /> 
+                <AnimatedCounter value={1000} />
                 <span>Cursos</span>
               </h3>
               <p>Eventos educativos realizados exitosamente</p>
             </motion.div>
 
-            <motion.div 
-              className="impact-card"
-              whileHover={{ scale: 1.05 }}
-            >
+            <motion.div className="impact-card" whileHover={{ scale: 1.05 }}>
               <Users className="impact-icon" />
               <h3>
                 <AnimatedCounter value={50000} />
@@ -331,10 +333,7 @@ function AboutPage() {
               <p>Aprendices activos en nuestra plataforma</p>
             </motion.div>
 
-            <motion.div 
-              className="impact-card"
-              whileHover={{ scale: 1.05 }}
-            >
+            <motion.div className="impact-card" whileHover={{ scale: 1.05 }}>
               <GraduationCap className="impact-icon" />
               <h3>
                 <AnimatedCounter value={500} />
@@ -356,10 +355,11 @@ function AboutPage() {
         >
           <h2 className="cta-title">Únete a Nuestra Comunidad Global</h2>
           <p className="cta-description">
-            Sé parte de una comunidad comprometida con la excelencia en la educación digital
+            Sé parte de una comunidad comprometida con la excelencia en la
+            educación digital
           </p>
           <div className="cta-features">
-            <motion.div 
+            <motion.div
               className="feature-item"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -369,7 +369,7 @@ function AboutPage() {
               <CheckCircle2 className="feature-icon" />
               <span>Acceso a eventos exclusivos</span>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="feature-item"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -379,7 +379,7 @@ function AboutPage() {
               <CheckCircle2 className="feature-icon" />
               <span>Networking global</span>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="feature-item"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
