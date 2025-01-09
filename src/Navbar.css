@@ -1,22 +1,36 @@
+/* Variables globales */
+:root {
+  --primary-blue: #21aae1;
+  --secondary-blue: #1084b9;
+  --dark-blue: #134a67;
+  --white: #ffffff;
+  --light-gray: #f1f9fe;
+  --transition: all 0.3s ease;
+}
+
+/* Estilos globales para eliminar la línea blanca */
+body, html {
+  margin: 0;
+  padding: 0;
+  background-color: var(--dark-blue);
+}
+
 /* Barra de navegación */
 .barra-navegacion {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 80px; /* Asegúrate de que esta altura sea correcta */
-  z-index: 1000; /* Mantén el navbar por encima del contenido */
+  height: 80px;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px; /* Opcional, ajusta según tu diseño */
-
-  background: linear-gradient(90deg, #21aae1, #1084b9); /* Degradado */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  color: white;
+  padding: 0 2rem;
+  background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--white);
 }
-
-
 
 /* Logo */
 .logo-navegacion {
@@ -27,6 +41,11 @@
 .logo-imagen {
   height: 50px;
   width: auto;
+  transition: var(--transition);
+}
+
+.logo-imagen:hover {
+  transform: scale(1.05);
 }
 
 /* Lista de navegación */
@@ -43,18 +62,18 @@
 }
 
 .enlace-navegacion {
-  color: white;
+  color: var(--white);
   text-decoration: none;
   padding: 10px 15px;
   font-size: 16px;
   font-weight: bold;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: var(--transition);
+  border-radius: 5px;
 }
 
 .enlace-navegacion:hover {
-  background-color: #f1f9fe;
-  color: #1084b9; /* Azul más oscuro */
-  border-radius: 5px;
+  background-color: var(--white);
+  color: var(--secondary-blue);
 }
 
 /* Botones */
@@ -63,33 +82,124 @@
   gap: 10px;
 }
 
+/* Estilos base para TODOS los botones */
 .btn-iniciar-sesion,
-.btn-registrarse {
+.btn-registrarse,
+.btn-ver-clases,
+.btn-mis-cursos,
+.btn-ver-perfil,
+.btn-cerrar-sesion {
   padding: 8px 15px;
   font-size: 14px;
   font-weight: bold;
   border-radius: 5px;
   text-decoration: none;
-  transition: background-color 0.3s ease, color 0.3s ease; /* Animación suave */
+  transition: var(--transition);
+  cursor: pointer;
+  border: 1px solid transparent;
 }
 
-.btn-iniciar-sesion {
+/* Botones estilo primario (fondo blanco) */
+.btn-registrarse,
+.btn-ver-perfil {
+  background-color: var(--white);
+  color: var(--secondary-blue);
+}
+
+.btn-registrarse:hover,
+.btn-ver-perfil:hover {
+  background-color: var(--secondary-blue);
+  color: var(--white);
+  border-color: var(--white);
+}
+
+/* Botones estilo secundario (transparente con borde) */
+.btn-iniciar-sesion,
+.btn-cerrar-sesion {
   background-color: transparent;
-  color: white;
-  border: 1px solid #fff;
+  color: var(--white);
+  border: 1px solid var(--white);
 }
 
-.btn-iniciar-sesion:hover {
-  background-color: #fff;
-  color: #1084b9;
+.btn-iniciar-sesion:hover,
+.btn-cerrar-sesion:hover {
+  background-color: var(--white);
+  color: var(--secondary-blue);
 }
 
-.btn-registrarse {
-  background-color: #fff;
-  color: #1084b9;
+/* Botones estilo terciario (semi-transparente) */
+.btn-ver-clases,
+.btn-mis-cursos {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.btn-registrarse:hover {
-  background-color: #134a67;
-  color: white;
+.btn-ver-clases:hover,
+.btn-mis-cursos:hover {
+  background-color: var(--white);
+  color: var(--secondary-blue);
+  border-color: var(--white);
+}
+
+/* Efectos activos para todos los botones */
+.btn-iniciar-sesion:active,
+.btn-registrarse:active,
+.btn-ver-clases:active,
+.btn-mis-cursos:active,
+.btn-ver-perfil:active,
+.btn-cerrar-sesion:active {
+  transform: scale(0.98);
+  transition: transform 0.1s;
+}
+
+/* Media Queries */
+@media screen and (max-width: 1024px) {
+  .barra-navegacion {
+    padding: 0 1.5rem;
+  }
+
+  .lista-navegacion {
+    gap: 15px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .barra-navegacion {
+    height: 70px;
+    padding: 0 1rem;
+  }
+
+  .logo-imagen {
+    height: 45px;
+  }
+
+  .lista-navegacion {
+    gap: 10px;
+  }
+
+  .enlace-navegacion {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .botones-navegacion {
+    gap: 8px;
+  }
+
+  .btn-iniciar-sesion,
+  .btn-registrarse,
+  .btn-ver-clases,
+  .btn-mis-cursos,
+  .btn-ver-perfil,
+  .btn-cerrar-sesion {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .lista-navegacion {
+    display: none; /* O implementar menú hamburguesa */
+  }
 }
