@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./RegisterPage.css";
-import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import { User, Mail, Lock, Phone, MapPin } from "lucide-react";
 
 function RegisterPage() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nombres: "",
     apellidos: "",
@@ -12,8 +15,9 @@ function RegisterPage() {
     city: "",
     phone: "",
   });
-
+  const [alert, setAlert] = useState({ show: false, message: "", type: "" });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   const images = [
     "/imagenes/1.jpg",
     "/imagenes/2.jpg",
@@ -30,7 +34,7 @@ function RegisterPage() {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,115 +44,136 @@ function RegisterPage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const showAlert = (message, type) => {
+    setAlert({ show: true, message, type });
+    setTimeout(() => setAlert({ show: false, message: "", type: "" }), 3000);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted", formData);
+    if (formData.password !== formData.confirmPassword) {
+      showAlert("Las contraseñas no coinciden", "error");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error al registrar");
+      }
+
+      showAlert("Registro exitoso", "success");
+      setTimeout(() => navigate("/login"), 1500);
+    } catch (error) {
+      showAlert(error.message, "error");
+    }
   };
 
   return (
     <div className="register-page">
+      <AnimatePresence>
+        {alert.show && (
+          <motion.div
+            className={`custom-alert ${alert.type}`}
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 100, opacity: 0 }}
+          >
+            <div>{alert.message}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="register-image">
-        <img
+        <motion.img
+          key={currentImageIndex}
           src={images[currentImageIndex]}
-          alt="Registro"
+          alt={`Illustration ${currentImageIndex + 1}`}
           className="register-img"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          
         />
-        <div className="register-link">
-          <p>¿Ya tienes una cuenta?</p>
-          <Link to="/login">Inicia sesión aquí</Link>
-        </div>
+        <div className="register-link-box">
+        <p>¿Ya tienes una cuenta?</p>
+        <Link to="/login" className="register-link-button">Inicia sesión aquí</Link>
+      </div>
       </div>
 
-      <div className="register-container">
-        <h2 className="register-title">Bienvenido a Handin! Crea tu cuenta</h2>
+      <motion.div
+        className="register-container"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        <motion.h2 className="register-title">Bienvenido a Handin! Crea tu cuenta</motion.h2>
+
         <form className="register-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="nombres">Nombres</label>
-            <input
-              type="text"
-              id="nombres"
-              name="nombres"
-              placeholder="Ingresa tus nombres"
-              value={formData.nombres}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="apellidos">Apellidos</label>
-            <input
-              type="text"
-              id="apellidos"
-              name="apellidos"
-              placeholder="Ingresa tus apellidos"
-              value={formData.apellidos}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">Correo Electrónico</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Ingresa tu correo"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Contraseña</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Crea una contraseña"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirmar Contraseña</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              placeholder="Confirma tu contraseña"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="city">Ciudad</label>
-            <input
-              type="text"
-              id="city"
-              name="city"
-              placeholder="Ingresa tu ciudad"
-              value={formData.city}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="phone">Teléfono</label>
-            <input
-              type="text"
-              id="phone"
-              name="phone"
-              placeholder="Ingresa tu teléfono"
-              value={formData.phone}
-              onChange={handleChange}
-            />
-          </div>
-          <button type="submit" className="btn-register">
+          {[
+            { name: "nombres", label: "Nombres", icon: <User size={18} /> },
+            { name: "apellidos", label: "Apellidos", icon: <User size={18} /> },
+            { name: "email", label: "Correo Electrónico", icon: <Mail size={18} /> },
+            { name: "password", label: "Contraseña", icon: <Lock size={18} /> },
+            {
+              name: "confirmPassword",
+              label: "Confirmar Contraseña",
+              icon: <Lock size={18} />,
+            },
+            { name: "city", label: "Ciudad", icon: <MapPin size={18} /> },
+            { name: "phone", label: "Teléfono", icon: <Phone size={18} /> },
+          ].map((field, index) => (
+            <motion.div
+              key={field.name}
+              className="form-group"
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.2 + index * 0.1 }}
+            >
+              <label htmlFor={field.name}>{field.label}</label>
+              <div className="input-wrapper">
+                {field.icon}
+                <input
+                  type={field.name.includes("password") ? "password" : "text"}
+                  id={field.name}
+                  name={field.name}
+                  placeholder={`Ingresa ${field.label.toLowerCase()}`}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  required
+                  className="input-with-icon"
+                />
+              </div>
+            </motion.div>
+          ))}
+
+          <motion.button
+            type="submit"
+            className="btn-register"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
             Registrarse
-          </button>
+          </motion.button>
         </form>
-      </div>
+
+        <motion.p
+          className="login-link"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+        </motion.p>
+        
+      </motion.div>
     </div>
   );
 }

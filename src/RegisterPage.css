@@ -191,3 +191,30 @@
 .alert-close-btn:hover {
   opacity: 1;
 }
+
+.register-link-box {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  text-align: center;
+  margin-top: 20px;
+  max-width: 80%;
+}
+
+.register-link-box p {
+  margin: 0 0 8px;
+  color: #134a67;
+  font-weight: bold;
+}
+
+.register-link-button {
+  text-decoration: none;
+  color: #21aae1;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.register-link-button:hover {
+  color: #1084b9;
+}
