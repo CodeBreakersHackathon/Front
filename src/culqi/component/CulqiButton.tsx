@@ -6,18 +6,28 @@ import Culqi3DSService from "../utils/culqi3DS";
 import { getMessage } from "../utils/util";
 import { checkoutConfig } from "../config";
 import "../culqi.css";
+import { CustomerInfo, ItemInfo } from "../config/Customer";
 
 const publicKey = import.meta.env.VITE_APP_CULQI_PUBLICKEY;
 
 interface CulqiButtonProps {
     buttonId?: string;
+    buttonTitle?: string;
+    payText?: string;
     chargeMessage: string;
+    itemInfo: ItemInfo;
+    customerInfo: CustomerInfo;
+    total_amount: number;
+    expiration_date: any;
     setChargeMessage: (value: string) => void;
 }
 
 export function CulqiButton(props: CulqiButtonProps) {
     const [CulqiCheckout, setCulqiCheckout] = useState<any>(null);
     const Culqi3DS = useRef<any>(null);
+    const customerInfo = props.customerInfo;
+    const amount = props.total_amount;
+    const itemInfo = props.itemInfo;
   
     const [removeMessageListener, setRemoveMessageListener] = useState(() => {});
   
@@ -28,11 +38,11 @@ export function CulqiButton(props: CulqiButtonProps) {
     const tokenId = useRef(null);
     const tokenEmail = useRef(null);
   
-    const [amount, setAmount] = useState(900);
-  
     // Function to handle 3DS parameters
     const handleSuccess3DSParameters = async (parameters3DS) => {
       const { data, status } = await createCharge({
+        customer: customerInfo,
+        total_amount: amount,
         deviceId: decive3DS.current,
         email: tokenEmail.current,
         tokenId: tokenId.current,
@@ -76,6 +86,8 @@ export function CulqiButton(props: CulqiButtonProps) {
     // Function to handle Culqi token
     const handleCulqiToken = async () => {
       const token = CulqiCheckout.getToken();
+      console.log(token)
+      console.log(CulqiCheckout.getOrder())
       const error = CulqiCheckout.getError();
       if (error) {
         console.log("ERROR - ERROR: ", error);
@@ -90,6 +102,8 @@ export function CulqiButton(props: CulqiButtonProps) {
   
       CulqiCheckout.close();
       const { data, status } = await createCharge({
+        customer: customerInfo,
+        total_amount: amount,
         deviceId: decive3DS.current,
         email: token.email,
         tokenId: token.id
@@ -135,9 +149,9 @@ export function CulqiButton(props: CulqiButtonProps) {
     }, []);
   
     useEffect(() => {
-      const generateOrder = async () => {
+      const generateOrder = async (customerInfo) => {
         isFirstRunOrderService.current = false; // Marca que ya no es la primera ejecución
-        const { data, status } = await createOrder();
+        const { data, status } = await createOrder(itemInfo, customerInfo, amount, props.expiration_date);
         if (status === 201) {
           orderId.current = data.id;
         } else {
@@ -145,22 +159,22 @@ export function CulqiButton(props: CulqiButtonProps) {
         }
       };
   
-      const handleCulqiCheckout = async () => {
+      const handleCulqiCheckout = async (customerInfo) => {
         if (isFirstRunOrderService.current) {
-          await generateOrder();
+          await generateOrder(customerInfo);
         }
         if (orderId.current) {
           const config = await culqiConfig({
             installments: true,
             orderId: orderId.current,
-            buttonTex: "",
+            buttonTex: props.payText ? props.payText : "Pagar",
             amount
           });
           setCulqiCheckout(new culqiCustomCheckout(publicKey, config));
         }
       };
   
-      handleCulqiCheckout();
+      handleCulqiCheckout(customerInfo);
     }, [orderId.current]);
   
     const openCheckout = async () => {
@@ -178,7 +192,7 @@ export function CulqiButton(props: CulqiButtonProps) {
 
   return (
     <button onClick={openCheckout} id={props.buttonId ? props.buttonId : "crearCharge"}>
-        Crear Cargo
+      {props.buttonTitle ? props.buttonTitle : "Crear Cargo"}
     </button>
   );
 }

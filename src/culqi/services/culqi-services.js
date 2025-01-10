@@ -1,33 +1,30 @@
-import { checkoutConfig, customerInfo } from "../config";
+import { checkoutConfig } from "../config";
 import { post } from "./util/api-connector";
 import { culqiPathName } from "./util/http.constants";
 
-const getEpochSeconds = () => {
-  const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() + 1);
-  return Math.floor(currentDate.getTime() / 1000);
+const getEpochSeconds = (date) => {
+  date.setDate(date.getDate() + 1);
+  return Math.floor(date.getTime() / 1000);
 };
 
-const generateOrderRequest = (epochSeconds) => {
-  const customer = customerInfo(getEpochSeconds());
+const generateOrderRequest = (itemInfo, customer, total_amount, expiration) => {
   return {
-    amount: checkoutConfig.TOTAL_AMOUNT,
+    amount: total_amount,
     currency_code: checkoutConfig.CURRENCY,
-    description: "Venta de prueba",
-    order_number: `pedido-${new Date().getTime()}`,
+    description: itemInfo.description,
+    order_number: itemInfo.order,
     client_details: {
       first_name: customer.firstName,
       last_name: customer.lastName,
       email: customer.email,
       phone_number: customer.phone
     },
-    expiration_date: epochSeconds
+    expiration_date: expiration
   };
 };
 
-export const createOrder = async () => {
-  const epochSeconds = getEpochSeconds();
-  const bodyRequest = generateOrderRequest(epochSeconds);
+export const createOrder = async (itemInfo, customerInfo, total_amount, expiration) => {
+  const bodyRequest = generateOrderRequest(itemInfo, customerInfo, total_amount, getEpochSeconds(expiration));
   const { data, status } = await post(culqiPathName.order, bodyRequest);
 
   if (status === 200 || status === 201) {
@@ -36,12 +33,11 @@ export const createOrder = async () => {
   return { data, status };
 };
 
-const generateChargeRequest = ({ email, tokenId, deviceId }) => {
-  const customer = customerInfo(getEpochSeconds());
+const generateChargeRequest = ({ customer, total_amount, tokenId, deviceId }) => {;
   return {
-    amount: checkoutConfig.TOTAL_AMOUNT,
+    amount: total_amount,
     currency_code: checkoutConfig.CURRENCY,
-    email: email,
+    email: customer.email,
     source_id: tokenId,
     antifraud_details: {
       first_name: customer.firstName,
@@ -54,16 +50,19 @@ const generateChargeRequest = ({ email, tokenId, deviceId }) => {
 };
 
 export const createCharge = async ({
+  customer,
   email,
+  total_amount,
   tokenId,
   deviceId,
   parameters3DS = null
 }) => {
-  const bodyRequest = generateChargeRequest({ email, tokenId, deviceId });
+  const bodyRequest = generateChargeRequest({ customer, total_amount, email, tokenId, deviceId });
 
   const payload = parameters3DS
     ? { ...bodyRequest, authentication_3DS: { ...parameters3DS } }
     : bodyRequest;
+  console.log("charge:", payload)
   const { data, status } = await post(culqiPathName.charge, payload);
 
   if (status === 200 || status === 201) {

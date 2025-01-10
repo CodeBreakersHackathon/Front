@@ -24,14 +24,3 @@ export const checkoutConfig = Object.freeze({
 //   phone: "999999999",
 //   email: "review1" + Math.floor(Math.random() * 100) + "@culqi.com"
 // };
-
-export const customerInfo = (random) => {
-  return {
-    firstName: "Dennis",
-    lastName: "Demo",
-    address: "Av siempre viva",
-    addressCity: "Lima",
-    phone: "999999999",
-    email: `review1${random}@culqi.com`
-  };
-};
