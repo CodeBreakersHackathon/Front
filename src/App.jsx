@@ -21,25 +21,18 @@ import MisCursos from "./MisCursos"; // Página para mostrar los cursos
 // import LiveStreamEmitter from './LiveStreamAntiguo/LiveStreamEmitter.jsx'; // Transmisor
 // import LiveStreamViewer from './LiveStreamAntiguo/LiveStreamViewer.jsx'; // Espectador
 
-
-
 // import LiveStream from "./LiveStreamAntiguo/LiveStreamAntiguo2/LiveStream.jsx"; // Importamos el componente de transmisión en vivo
 // import LiveStreamEmitter from "./LiveStreamAntiguo/LiveStreamAntiguo2/LiveStreamEmitter.jsx"; // Transmisor
 // import LiveStreamViewer from "./LiveStreamAntiguo/LiveStreamAntiguo2/LiveStreamViewer.jsx"; // Espectador
 
-
-
 // import Broadcaster from "./components/Broadcaster";
 // import Viewer from "./components/Viewer";
 
-
 import VideoChat from './VideoChat'; // Importar VideoChat
-
+import EventosPage from "./EventosPage"; // Importar página de eventos
 
 function App() {
-
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
 
   useEffect(() => {
     const token = Cookies.get("access_token");
@@ -47,8 +40,6 @@ function App() {
       setIsAuthenticated(true); // Si existe un token, el usuario está logueado
     }
   }, []);
-
-
 
   return (
     <Router>
@@ -67,7 +58,7 @@ function App() {
           <Route path="/tickets/user/:userId/courses" element={<MisCursos />} />
           {/* <Route path="/mis-clases" element={<MyClassesPage />} /> */}
           <Route path="/class/:id/view" element={<ClassView />} />
-          
+          <Route path="/eventos" element={<EventosPage />} /> {/* Nueva ruta para eventos */}
 
           {/* <Route path="/live-stream" element={<LiveStream />} /> */}
           {/* <Route path="/live-updates" element={<LiveUpdates />} /> */}
@@ -77,10 +68,6 @@ function App() {
           {/* Ruta para el espectador */}
           {/* <Route path="/espectador" element={<LiveStreamViewer />} /> */}
 
-
-
-
-
           {/* <Route path="/live" element={<LiveStream />} /> */}
           {/* <Route path="/live/emitter" element={<LiveStreamEmitter />} /> 
           <Route path="/live/viewer" element={<LiveStreamViewer />} />  */}
@@ -88,13 +75,9 @@ function App() {
           {/* Nuevas rutas para el streaming */}
           {/* <Route path="/streaming/stream/:roomId" element={<Broadcaster />} />
           <Route path="/streaming/watch/:roomId" element={<Viewer />} />
-
- */}
+          */}
 
           <Route path="/videochat" element={<VideoChat />} />
-
-
-
         </Routes>
       </AuthProvider>
     </Router>
@@ -102,4 +85,3 @@ function App() {
 }
 
 export default App;
-
