@@ -3,15 +3,76 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f1f9fe;
+  padding: 20px;
+  position: relative;
+}
+
+/* Estilos para las alertas personalizadas */
+.custom-alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 300px;
+  max-width: 450px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease-out;
+  z-index: 1000;
+}
+
+.custom-alert.success {
+  background-color: #4ade80;
+  color: #ffffff;
+}
+
+.custom-alert.error {
+  background-color: #f87171;
+  color: #ffffff;
+}
+
+.alert-message {
+  margin-right: 12px;
+  font-size: 0.95rem;
+}
+
+.alert-close-btn {
+  background: none;
+  border: none;
+  color: currentColor;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.alert-close-btn:hover {
+  opacity: 1;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 /* Formulario */
 .register-form {
   background-color: white;
   padding: 30px;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
@@ -40,13 +101,15 @@
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #bfe6f8;
-  border-radius: 5px;
-  font-size: 1rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
   color: #134a67;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
 }
 
 .register-form input:focus {
-  border-color: #21aae1;
+  border-color: #46bcea;
   outline: none;
 }
 
@@ -59,16 +122,18 @@
   font-size: 1rem;
   font-weight: bold;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .btn-register:hover {
   background-color: #1084b9;
-  transform: scale(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-register:active {
-  transform: scale(0.98);
+  transform: translateY(0);
+  box-shadow: none;
 }

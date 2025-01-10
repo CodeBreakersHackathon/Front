@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import "./RegisterPage.css";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
+  const navigate = useNavigate();
+  const [alert, setAlert] = useState({ show: false, message: "", type: "" });
   const [formData, setFormData] = useState({
     nombres: "",
     apellidos: "",
@@ -21,10 +24,17 @@ function RegisterPage() {
     });
   };
 
+  const showAlert = (message, type) => {
+    setAlert({ show: true, message, type });
+    if (type === 'error') {
+      setTimeout(() => {
+        setAlert({ show: false, message: "", type: "" });
+      }, 3000);
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
     try {
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
@@ -40,28 +50,28 @@ function RegisterPage() {
       switch (response.status) {
         case 200:
           const data = await response.json();
-          alert("Inicio de sesión exitoso");
-          console.log(data);
+          showAlert("Registro exitoso", "success");
           Cookies.set("access_token", data.access_token);
-          window.location.href = "/";
+          setTimeout(() => {
+            navigate("/");
+          }, 1500);
           break;
         case 401:
-          alert("Credenciales incorrectos");
+          showAlert("Credenciales incorrectos", "error");
           break;
         default:
           const errorData = await response.json();
-          console.error("Error en el inicio de sesión:", errorData);
           throw new Error(errorData.message || "Error al iniciar sesión");
       }
     } catch (error) {
-      alert(error);
+      showAlert(error.message, "error");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("Las contraseñas no coinciden.");
+      showAlert("Las contraseñas no coinciden", "error");
       return;
     }
 
@@ -76,7 +86,7 @@ function RegisterPage() {
           lastName: formData.apellidos,
           email: formData.email,
           password: formData.password,
-          role: "user", // harcodeado
+          role: "user",
           city: formData.city,
           phone: formData.phone,
         }),
@@ -84,22 +94,31 @@ function RegisterPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error en el registro:", errorData);
         throw new Error(errorData.message || "Error al registrar el usuario");
       }
 
       const data = await response.json();
-      alert("Registro exitoso");
-      console.log(data);
+      showAlert("Registro exitoso", "success");
       await handleLogin(e);
     } catch (error) {
-      console.error(error);
-      alert("Hubo un error al registrar el usuario");
+      showAlert(error.message || "Hubo un error al registrar el usuario", "error");
     }
   };
 
   return (
     <div className="register-container">
+      {alert.show && (
+        <div className={`custom-alert ${alert.type}`}>
+          <div className="alert-message">{alert.message}</div>
+          <button 
+            onClick={() => setAlert({ show: false, message: "", type: "" })}
+            className="alert-close-btn"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>Crear Cuenta</h2>
 
