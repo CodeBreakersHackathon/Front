@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom"; // Agregamos Link para la navegación
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   Video,
@@ -33,6 +34,7 @@ const services = [
       "Coffee breaks incluidos",
     ],
     highlight: "Experiencia inmersiva",
+    link: "/eventos" // Agregamos el link para navegación
   },
   {
     id: 2,
@@ -49,6 +51,7 @@ const services = [
       "Certificado digital",
     ],
     highlight: "Interacción en tiempo real",
+    link: "/eventos" // Agregamos el link para navegación
   },
   {
     id: 3,
@@ -64,9 +67,9 @@ const services = [
       "Recursos adicionales",
     ],
     highlight: "Flexibilidad total",
+    link: "/eventos" // Agregamos el link para navegación
   },
 ];
-
 // Datos de precios
 const pricing = [
   {
@@ -271,27 +274,27 @@ const ServicesPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
-            <motion.button
-              className="services-page__button services-page__button--primary"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Explorar Servicios
-              <motion.span
-                className="services-page__button-icon"
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1, repeat: Infinity }}
+            <Link to="/eventos">
+              <motion.button
+                className="services-page__button services-page__button--primary"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <ArrowRight />
-              </motion.span>
-            </motion.button>
+                Explorar Eventos
+                <motion.span
+                  className="services-page__button-icon"
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                >
+                  <ArrowRight />
+                </motion.span>
+              </motion.button>
+            </Link>
           </motion.div>
         </div>
       </motion.section>
-
-      {/* El resto de las secciones irán aquí */}
-      {/* Services Grid Section */}
-      <section className="services-page__grid">
+{/* Services Grid Section */}
+<section className="services-page__grid">
         <motion.div className="services-page__section-header" {...fadeInUp}>
           <h2 className="services-page__section-title">Nuestros Servicios</h2>
           <p className="services-page__section-description">
@@ -301,123 +304,122 @@ const ServicesPage = () => {
 
         <div className="services-page__cards-grid">
           {services.map((service, index) => (
-            <motion.div
-              key={service.id}
-              className={`services-page__card ${
-                activeService === service.id
-                  ? "services-page__card--active"
-                  : ""
-              }`}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                delay: index * 0.2,
-                duration: 0.5,
-                ease: "easeOut",
-              }}
-              onHoverStart={() => setActiveService(service.id)}
-              onHoverEnd={() => setActiveService(null)}
-            >
-              {/* Efecto de gradiente animado */}
+            <Link to={service.link} key={service.id}>
               <motion.div
-                className="services-page__card-gradient"
-                animate={{
-                  opacity: activeService === service.id ? 1 : 0,
-                  scale: activeService === service.id ? 1.05 : 1,
+                className={`services-page__card ${
+                  activeService === service.id ? "services-page__card--active" : ""
+                }`}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: index * 0.2,
+                  duration: 0.5,
+                  ease: "easeOut",
                 }}
-                transition={{ duration: 0.3 }}
-              />
-
-              {/* Contenido de la tarjeta */}
-              <div className="services-page__card-content">
-                {/* Icono con animación */}
+                onHoverStart={() => setActiveService(service.id)}
+                onHoverEnd={() => setActiveService(null)}
+              >
+                {/* Efecto de gradiente animado */}
                 <motion.div
-                  className="services-page__card-icon-wrapper"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                >
-                  {React.createElement(service.icon, {
-                    size: 32,
-                    className: "services-page__card-icon",
-                  })}
-                </motion.div>
-
-                {/* Título y descripción */}
-                <motion.h3
-                  className="services-page__card-title"
+                  className="services-page__card-gradient"
                   animate={{
-                    color:
-                      activeService === service.id
-                        ? "var(--services-primary-500)"
-                        : "var(--services-primary-900)",
-                  }}
-                >
-                  {service.title}
-                </motion.h3>
-
-                <p className="services-page__card-description">
-                  {service.description}
-                </p>
-
-                {/* Lista de características */}
-                <div className="services-page__card-features">
-                  {service.features.map((feature, idx) => (
-                    <motion.div
-                      key={idx}
-                      className="services-page__card-feature"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{
-                        delay: idx * 0.1,
-                        duration: 0.3,
-                      }}
-                    >
-                      <motion.div
-                        whileHover={{ scale: 1.2, rotate: 360 }}
-                        className="services-page__feature-icon-wrapper"
-                      >
-                        <Check className="services-page__feature-icon" />
-                      </motion.div>
-                      <span>{feature}</span>
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Badge destacado */}
-                <motion.div
-                  className="services-page__card-highlight"
-                  animate={{
+                    opacity: activeService === service.id ? 1 : 0,
                     scale: activeService === service.id ? 1.05 : 1,
-                    backgroundColor:
-                      activeService === service.id
-                        ? "var(--services-primary-500)"
-                        : "var(--services-primary-50)",
-                    color:
-                      activeService === service.id
-                        ? "white"
-                        : "var(--services-primary-600)",
                   }}
-                >
-                  {service.highlight}
-                </motion.div>
+                  transition={{ duration: 0.3 }}
+                />
 
-                {/* Botón de acción */}
-                <motion.button
-                  className="services-page__card-button"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Explorar más
+                {/* Contenido de la tarjeta */}
+                <div className="services-page__card-content">
+                  {/* Icono con animación */}
                   <motion.div
-                    className="services-page__card-button-icon"
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1, repeat: Infinity }}
+                    className="services-page__card-icon-wrapper"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
                   >
-                    <ArrowRight />
+                    {React.createElement(service.icon, {
+                      size: 32,
+                      className: "services-page__card-icon",
+                    })}
                   </motion.div>
-                </motion.button>
-              </div>
-            </motion.div>
+
+                  {/* Título y descripción */}
+                  <motion.h3
+                    className="services-page__card-title"
+                    animate={{
+                      color:
+                        activeService === service.id
+                          ? "var(--services-primary-500)"
+                          : "var(--services-primary-900)",
+                    }}
+                  >
+                    {service.title}
+                  </motion.h3>
+
+                  <p className="services-page__card-description">
+                    {service.description}
+                  </p>
+
+                  {/* Lista de características */}
+                  <div className="services-page__card-features">
+                    {service.features.map((feature, idx) => (
+                      <motion.div
+                        key={idx}
+                        className="services-page__card-feature"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{
+                          delay: idx * 0.1,
+                          duration: 0.3,
+                        }}
+                      >
+                        <motion.div
+                          whileHover={{ scale: 1.2, rotate: 360 }}
+                          className="services-page__feature-icon-wrapper"
+                        >
+                          <Check className="services-page__feature-icon" />
+                        </motion.div>
+                        <span>{feature}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Badge destacado */}
+                  <motion.div
+                    className="services-page__card-highlight"
+                    animate={{
+                      scale: activeService === service.id ? 1.05 : 1,
+                      backgroundColor:
+                        activeService === service.id
+                          ? "var(--services-primary-500)"
+                          : "var(--services-primary-50)",
+                      color:
+                        activeService === service.id
+                          ? "white"
+                          : "var(--services-primary-600)",
+                    }}
+                  >
+                    {service.highlight}
+                  </motion.div>
+
+                  {/* Botón de acción */}
+                  <motion.div
+                    className="services-page__card-button"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Ver eventos
+                    <motion.div
+                      className="services-page__card-button-icon"
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1, repeat: Infinity }}
+                    >
+                      <ArrowRight />
+                    </motion.div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </Link>
           ))}
         </div>
 
@@ -441,12 +443,11 @@ const ServicesPage = () => {
           ))}
         </div>
       </section>
+
       {/* Testimonials Section */}
       <section className="services-page__testimonials">
         <motion.div className="services-page__section-header" {...fadeInUp}>
-          <h2 className="services-page__section-title">
-            Lo que dicen nuestros usuarios
-          </h2>
+          <h2 className="services-page__section-title">Lo que dicen nuestros usuarios</h2>
           <p className="services-page__section-description">
             Experiencias reales de nuestra comunidad educativa
           </p>
@@ -504,24 +505,13 @@ const ServicesPage = () => {
                         />
                       </motion.div>
                       <div className="services-page__testimonial-info">
-                        <h4 className="services-page__testimonial-name">
-                          {testimonial.name}
-                        </h4>
-                        <p className="services-page__testimonial-role">
-                          {testimonial.role}
-                        </p>
+                        <h4 className="services-page__testimonial-name">{testimonial.name}</h4>
+                        <p className="services-page__testimonial-role">{testimonial.role}</p>
                       </div>
                     </div>
 
                     {/* Comentario */}
-                    <motion.p
-                      className="services-page__testimonial-comment"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                    >
-                      {testimonial.comment}
-                    </motion.p>
+                    <p className="services-page__testimonial-comment">{testimonial.comment}</p>
 
                     {/* Pie del testimonial */}
                     <div className="services-page__testimonial-footer">
@@ -534,10 +524,7 @@ const ServicesPage = () => {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: i * 0.1 }}
                           >
-                            <Star
-                              className="services-page__testimonial-star"
-                              fill="currentColor"
-                            />
+                            <Star className="services-page__testimonial-star" fill="currentColor" />
                           </motion.div>
                         ))}
                       </div>
@@ -547,9 +534,7 @@ const ServicesPage = () => {
                         <span className="services-page__testimonial-service">
                           {testimonial.service}
                         </span>
-                        <span className="services-page__testimonial-date">
-                          {testimonial.date}
-                        </span>
+                        <span className="services-page__testimonial-date">{testimonial.date}</span>
                       </div>
                     </div>
                   </div>
@@ -614,13 +599,12 @@ const ServicesPage = () => {
           </div>
         </div>
       </section>
-      {/* FAQ Section */}
-      <section className="services-page__faq">
+{/* FAQ Section */}
+<section className="services-page__faq">
         <motion.div className="services-page__section-header" {...fadeInUp}>
           <h2 className="services-page__section-title">Preguntas Frecuentes</h2>
           <p className="services-page__section-description">
-            Encuentra respuestas a las dudas más comunes sobre nuestros
-            servicios
+            Encuentra respuestas a las dudas más comunes sobre nuestros servicios
           </p>
         </motion.div>
 
@@ -760,6 +744,7 @@ const ServicesPage = () => {
           />
         </div>
       </section>
+
       {/* CTA Section */}
       <section className="services-page__cta">
         {/* Fondo con gradiente animado */}
@@ -817,7 +802,6 @@ const ServicesPage = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          {/* Título principal con animación */}
           <motion.h2
             className="services-page__cta-title"
             initial={{ opacity: 0, y: -20 }}
@@ -840,7 +824,6 @@ const ServicesPage = () => {
             </motion.span>
           </motion.h2>
 
-          {/* Descripción */}
           <motion.p
             className="services-page__cta-description"
             initial={{ opacity: 0 }}
@@ -848,11 +831,9 @@ const ServicesPage = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            Únete a nuestra comunidad y transforma tu futuro con educación de
-            calidad.
+            Únete a nuestra comunidad y transforma tu futuro con educación de calidad
           </motion.p>
 
-          {/* Botones principales */}
           <motion.div
             className="services-page__cta-buttons-container"
             initial={{ opacity: 0, y: 20 }}
@@ -860,64 +841,39 @@ const ServicesPage = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
           >
-            <motion.button
-              className="services-page__cta-button services-page__cta-button--primary"
-              whileHover={{
-                scale: 1.1,
-                boxShadow: "0px 8px 20px rgba(33, 150, 243, 0.4)",
-              }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Comenzar Ahora
-              <motion.span
-                className="services-page__cta-button-icon"
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
+            <Link to="/eventos">
+              <motion.button
+                className="services-page__cta-button services-page__cta-button--primary"
+                whileHover={{
+                  scale: 1.1,
+                  boxShadow: "0px 8px 20px rgba(33, 150, 243, 0.4)",
+                }}
+                whileTap={{ scale: 0.95 }}
               >
-                <ArrowRight />
-              </motion.span>
-            </motion.button>
-
-            <motion.button
-              className="services-page__cta-button services-page__cta-button--secondary"
-              whileHover={{
-                scale: 1.05,
-                backgroundColor: "rgba(0, 0, 0, 0.1)",
-              }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Ver Más
-            </motion.button>
+                Ver Todos los Eventos
+                <ArrowRight className="services-page__cta-button-icon" />
+              </motion.button>
+            </Link>
+            <Link to="/register">
+              <motion.button
+                className="services-page__cta-button services-page__cta-button--secondary"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Registrarse
+              </motion.button>
+            </Link>
           </motion.div>
 
-          {/* Redes sociales con animación */}
-          <motion.div
-            className="services-page__cta-social"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.6 }}
-          >
-            <p className="services-page__cta-social-title">
-              Síguenos en redes sociales
-            </p>
-            <div className="services-page__cta-social-icons">
-              {[Facebook, Instagram, Linkedin].map((Icon, index) => (
-                <motion.a
-                  key={index}
-                  href="#"
-                  className="services-page__cta-social-icon"
-                  whileHover={{
-                    scale: 1.3,
-                    backgroundColor: "rgba(0, 0, 0, 0.1)",
-                  }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Icon size={24} />
-                </motion.a>
-              ))}
+          {/* Social Links */}
+          <div className="services-page__social-links">
+            <p>Síguenos en redes sociales</p>
+            <div className="services-page__social-icons">
+              <motion.a href="#" whileHover={{ scale: 1.2 }}><Facebook /></motion.a>
+              <motion.a href="#" whileHover={{ scale: 1.2 }}><Instagram /></motion.a>
+              <motion.a href="#" whileHover={{ scale: 1.2 }}><Linkedin /></motion.a>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
       </section>
     </div>
