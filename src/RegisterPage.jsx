@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./RegisterPage.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { User, Mail, Lock, Phone, MapPin } from "lucide-react";
+import { User, Mail, Lock, Phone, MapPin, FlagIcon, House } from "lucide-react";
 import { API_URL } from "./apiConstants";
 
 function RegisterPage() {
@@ -68,7 +68,9 @@ function RegisterPage() {
           lastName: formData.apellidos,
           email: formData.email,
           password: formData.password,
+          address: formData.address,
           city: formData.city,
+          country: formData.country,
           phone: formData.phone,
           role: "user",
         }),
@@ -137,6 +139,8 @@ function RegisterPage() {
               label: "Confirmar Contraseña",
               icon: <Lock size={18} />,
             },
+            { name: "address", label: "Dirección", icon: <House size={18} /> },
+            { name: "country", label: "País", icon: <FlagIcon size={18} /> },
             { name: "city", label: "Ciudad", icon: <MapPin size={18} /> },
             { name: "phone", label: "Teléfono", icon: <Phone size={18} /> },
           ].map((field, index) => (
