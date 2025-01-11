@@ -58,9 +58,9 @@ function RegisterPage() {
       showAlert("Las contraseñas no coinciden", "error");
       return;
     }
-
+  
     try {
-      const response = await fetch(`${API_URL}/auth/register`, {
+      const response = await fetch(`http://localhost:3000/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,18 +77,19 @@ function RegisterPage() {
           role: "user",
         }),
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Error al registrar");
       }
-
+  
       showAlert("Registro exitoso", "success");
       setTimeout(() => navigate("/login"), 1500);
     } catch (error) {
       showAlert(error.message, "error");
     }
   };
+  
 
   return (
     <div className="register-page">

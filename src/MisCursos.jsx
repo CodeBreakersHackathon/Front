@@ -37,8 +37,7 @@ const MisCursos = () => {
 
       try {
         // Obtener el token de acceso
-        const token = localStorage.getItem("token");
-        
+        const token = localStorage.getItem("access_token");        
         // Realizar la solicitud HTTP a la API con el token
         const response = await axios.get(
           `${API_URL}/tickets/user/${userId}/courses`,
