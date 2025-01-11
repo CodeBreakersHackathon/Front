@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { API_URL } from './apiConstants';
 
 const ClassView = () => {
   const { id } = useParams(); // Obtener el ID del curso desde la URL
@@ -10,7 +11,7 @@ const ClassView = () => {
   useEffect(() => {
     // Llamar a la API para obtener las clases del curso
     axios
-      .get(`http://localhost:3000/classes/course/${id}`)
+      .get(`${API_URL}/classes/course/${id}`)
       .then((response) => {
         setClassDetails(response.data); // Guardar las clases en el estado
       })
@@ -36,7 +37,7 @@ const ClassView = () => {
             {classItem.videoUrl ? (
               <video width="100%" controls>
                 <source
-                  src={`http://localhost:3000${classItem.videoUrl}`}
+                  src={`${API_URL}${classItem.videoUrl}`}
                   type="video/mp4"
                 />
                 Tu navegador no soporta el formato de video.

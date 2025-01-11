@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useAuth } from "./AuthContext";
 import { Mail, Lock, Loader, X } from 'lucide-react';
+import { API_URL } from "./apiConstants";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -38,7 +39,7 @@ function LoginPage() {
     setIsLoading(true);
     
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

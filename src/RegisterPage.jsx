@@ -3,6 +3,7 @@ import "./RegisterPage.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { User, Mail, Lock, Phone, MapPin } from "lucide-react";
+import { API_URL } from "./apiConstants";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -57,12 +58,20 @@ function RegisterPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/auth/register", {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          firstName: formData.nombres,
+          lastName: formData.apellidos,
+          email: formData.email,
+          password: formData.password,
+          city: formData.city,
+          phone: formData.phone,
+          role: "user",
+        }),
       });
 
       if (!response.ok) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Añadir useNavigate
 import axios from 'axios';
+import { API_URL } from './apiConstants';
 
 // Función para decodificar el JWT
 const decodeJWT = (token) => {
@@ -41,7 +42,7 @@ const ClassDetails = () => {
 
     // Llamar a la API para obtener los detalles de la clase
     axios
-      .get(`http://localhost:3000/course/${id}`)
+      .get(`${API_URL}/course/${id}`)
       .then((response) => {
         setClassDetails(response.data);
       })
@@ -74,7 +75,7 @@ const ClassDetails = () => {
   
       // Hacer la petición POST con la ruta correcta
       const response = await axios.post(
-        `http://localhost:3000/tickets/${id}/subscribe`, // id es el courseId de useParams
+        `${API_URL}/tickets/${id}/subscribe`, // id es el courseId de useParams
         {
           userId: userId // Enviamos solo el userId en el body
         },

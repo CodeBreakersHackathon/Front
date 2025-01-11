@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Ya no necesitamos useParams
 import axios from "axios";
 import "./MisCursos.css";
+import { API_URL } from "./apiConstants";
 
 const MisCursos = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const MisCursos = () => {
         
         // Realizar la solicitud HTTP a la API con el token
         const response = await axios.get(
-          `http://localhost:3000/tickets/user/${userId}/courses`,
+          `${API_URL}/tickets/user/${userId}/courses`,
           {
             headers: {
               Authorization: `Bearer ${token}`

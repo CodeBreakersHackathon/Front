@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { API_URL } from './apiConstants';
 
 function ClassesPage() {
   const [classes, setClasses] = useState([]);
@@ -7,7 +8,7 @@ function ClassesPage() {
   // Usamos useEffect para obtener las clases desde la API del backend cuando el componente se monta
   useEffect(() => {
     // Cambia esta URL por la de tu API
-    fetch('http://localhost:3000/courses/')
+    fetch(`${API_URL}/courses/`)
       .then(response => response.json())
       .then(data => {
         setClasses(data); // Guardamos las clases en el estado
