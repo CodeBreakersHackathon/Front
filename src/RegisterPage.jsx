@@ -13,6 +13,8 @@ function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
+    address: "",
+    country: "",
     city: "",
     phone: "",
   });
