@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
+import { API_URL } from './apiConstants';
 
 function MyClassesPage() {
   const [subscribedClasses, setSubscribedClasses] = useState([]);
@@ -9,7 +10,7 @@ function MyClassesPage() {
     const fetchSubscribedClasses = async () => {
       try {
         const token = Cookies.get("access_token");
-        const response = await fetch("http://localhost:3000/user/subscriptions", {
+        const response = await fetch(`${API_URL}/user/subscriptions`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`,
