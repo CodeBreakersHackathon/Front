@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
     if (token) {
       setIsLoggedIn(true); // Si hay token, el usuario está autenticado
     }
-  }, []);
+  }, [token]);
 
   const login = () => {
     setIsLoggedIn(true);
