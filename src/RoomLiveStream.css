@@ -1,0 +1,164 @@
+/* Estilos globales */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+  }
+  
+  p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  /* Contenedor principal */
+  .p-4 {
+    padding: 50px;
+  }
+  
+  /* Contenedores de botones */
+  button {
+    transition: all 0.3s ease;
+  }
+  
+  /* Botones principales */
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Estilos para los botones */
+  button.bg-blue-500 {
+    background-color: #4299e1;
+  }
+  
+  button.bg-blue-600:hover {
+    background-color: #3182ce;
+  }
+  
+  button.bg-red-500 {
+    background-color: #e53e3e;
+  }
+  
+  button.bg-red-600:hover {
+    background-color: #c53030;
+  }
+  
+  button.bg-green-500 {
+    background-color: #48bb78;
+  }
+  
+  button.bg-green-600:hover {
+    background-color: #38a169;
+  }
+  
+  button.bg-yellow-500 {
+    background-color: #ecc94b;
+  }
+  
+  button.bg-yellow-600:hover {
+    background-color: #d69e2e;
+  }
+  
+  /* Estilos para la entrada de texto */
+  input {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 60%;
+    box-sizing: border-box;
+  }
+  
+  /* Caja de video local */
+  
+  .all-css.p-4{
+    width:100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  
+  
+  .videos-container{
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .local-video-css {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    width: 300px;
+  }
+  
+  .remote-video-css{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    width: 300px;
+  }
+  
+  .share-screen-css{
+    width: 900px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  video {
+    max-width: 100%;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  /* Contenedor de chat */
+  .chat-container {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chat-messages {
+    max-height: 300px;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+  }
+  
+  .chat-message {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+  }
+  
+  .chat-input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+  
+  .chat-send-button {
+    background-color: #3182ce;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .chat-send-button:hover {
+    background-color: #2b6cb0;
+  }
+  
+  /* Contenedor de estado de la sala */
+  .sala-actual {
+    margin-top: 20px;
+    font-size: 1rem;
+  }
+  
+  .sala-actual span {
+    font-weight: bold;
+  }
+  

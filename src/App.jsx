@@ -32,6 +32,10 @@ import CartPage from "./CartPage.jsx";
 import VideoChat from "./VideoChat"; // Importar VideoChat
 import EventosPage from "./EventosPage"; // Importar página de eventos
 
+import RoomLiveStream from "./RoomLiveStream"; // Importar página de eventos
+
+
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -80,6 +84,9 @@ function App() {
           <Route path="/videochat" element={<VideoChat />} />
           <Route path="/cart" element={<CartPage />} />
           {/* Nueva ruta para eventos */}
+
+
+          <Route path="/RoomLiveStream" element={<RoomLiveStream/>}/>
         </Routes>
       </AuthProvider>
     </Router>
