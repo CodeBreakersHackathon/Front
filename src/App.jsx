@@ -33,6 +33,7 @@ import VideoChat from "./VideoChat"; // Importar VideoChat
 import EventosPage from "./EventosPage"; // Importar página de eventos
 
 import RoomLiveStream from "./RoomLiveStream"; // Importar página de eventos
+import PerfilPage from "./Perfil.jsx";
 
 
 
@@ -83,6 +84,7 @@ function App() {
           */}
           <Route path="/videochat" element={<VideoChat />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/profile" element={<PerfilPage />} />
           {/* Nueva ruta para eventos */}
 
 

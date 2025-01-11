@@ -1,7 +1,29 @@
 import React from "react";
-import "./PerfilPage.css";
+import "./Perfil.css";
+import { API_URL } from "./apiConstants";
 
-function PerfilPage() {
+export function PerfilPage() {
+  const [loading, setLoading] = React.useState(true);
+  const [user, setUser] = React.useState(null);
+
+  const fetchUser = async () => {
+    const res = await fetch(`${API_URL}/users/me`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
+    const data = await res.json();
+    console.log(data)
+    setUser(data);
+    setLoading(false);
+  }
+
+  React.useEffect(() => {
+    if (loading)
+    fetchUser();
+  }, [loading]);
+
   return (
     <div className="perfil-container">
       <aside className="perfil-sidebar">
@@ -17,6 +39,7 @@ function PerfilPage() {
         </ul>
       </aside>
 
+{!loading ? (
       <main className="perfil-main">
         <div className="perfil-header">
           <img
@@ -24,7 +47,7 @@ function PerfilPage() {
             alt="Profile"
             className="perfil-picture"
           />
-          <h1>Veliz Barba, Ashly Nicole</h1>
+          <h1>{user.lastName}, {user.firstName}</h1>
         </div>
         <section className="perfil-details">
           <h2>Contacto</h2>
@@ -38,6 +61,7 @@ function PerfilPage() {
         </section>
         <button className="perfil-edit-btn">Editar el perfil</button>
       </main>
+    ) : "Cargando..."};
     </div>
   );
 }
