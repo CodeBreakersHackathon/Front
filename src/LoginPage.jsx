@@ -68,7 +68,7 @@ function LoginPage() {
           userId,
         };
   
-        localStorage.setItem("token", access_token);
+        localStorage.setItem("access_token", access_token);
         localStorage.setItem("userData", JSON.stringify(userData));
         Cookies.set("access_token", access_token);
   
