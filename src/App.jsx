@@ -16,6 +16,7 @@ import OnlyCharge from "./culqi/pages/CulqiComponents.tsx";
 // import MyClassesPage from "./MyClassesPage"; // Importar la página de clases suscritas
 import ClassView from "./ClassView";
 import MisCursos from "./MisCursos"; // Página para mostrar los cursos
+import CartPage from "./CartPage.jsx";
 // import LiveUpdates from "./LiveStreamAntiguo/LiveUpdates.jsx"; // Asegúrate de que la ruta sea correcta
 // import LiveStream from './LiveStream';
 // import LiveStreamEmitter from './LiveStreamAntiguo/LiveStreamEmitter.jsx'; // Transmisor
@@ -28,7 +29,7 @@ import MisCursos from "./MisCursos"; // Página para mostrar los cursos
 // import Broadcaster from "./components/Broadcaster";
 // import Viewer from "./components/Viewer";
 
-import VideoChat from './VideoChat'; // Importar VideoChat
+import VideoChat from "./VideoChat"; // Importar VideoChat
 import EventosPage from "./EventosPage"; // Importar página de eventos
 
 function App() {
@@ -44,7 +45,8 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <Navbar isAuthenticated={isAuthenticated} /> {/* Pasamos el estado al Navbar */}
+        <Navbar isAuthenticated={isAuthenticated} />{" "}
+        {/* Pasamos el estado al Navbar */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/culqi" element={<OnlyCharge />} />
@@ -53,31 +55,31 @@ function App() {
           <Route path="/contacto" element={<ContactPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/course" element={<ClassesPage />} /> {/* Ruta de clases */}
-          <Route path="/course/:id" element={<ClassDetails />} />{/* Ruta para los detalles de la clase */}
+          <Route path="/course" element={<ClassesPage />} />{" "}
+          {/* Ruta de clases */}
+          <Route path="/course/:id" element={<ClassDetails />} />
+          {/* Ruta para los detalles de la clase */}
           <Route path="/tickets/user/:userId/courses" element={<MisCursos />} />
           {/* <Route path="/mis-clases" element={<MyClassesPage />} /> */}
           <Route path="/class/:id/view" element={<ClassView />} />
-          <Route path="/eventos" element={<EventosPage />} /> {/* Nueva ruta para eventos */}
-
+          <Route path="/eventos" element={<EventosPage />} />{" "}
+          {/* Nueva ruta para eventos */}
           {/* <Route path="/live-stream" element={<LiveStream />} /> */}
           {/* <Route path="/live-updates" element={<LiveUpdates />} /> */}
           {/* Ruta para el transmisor */}
           {/* <Route path="/transmisor" element={<LiveStreamEmitter />} /> */}
-
           {/* Ruta para el espectador */}
           {/* <Route path="/espectador" element={<LiveStreamViewer />} /> */}
-
           {/* <Route path="/live" element={<LiveStream />} /> */}
           {/* <Route path="/live/emitter" element={<LiveStreamEmitter />} /> 
           <Route path="/live/viewer" element={<LiveStreamViewer />} />  */}
-
           {/* Nuevas rutas para el streaming */}
           {/* <Route path="/streaming/stream/:roomId" element={<Broadcaster />} />
           <Route path="/streaming/watch/:roomId" element={<Viewer />} />
           */}
-
           <Route path="/videochat" element={<VideoChat />} />
+          <Route path="/cart" element={<CartPage />} />
+          {/* Nueva ruta para eventos */}
         </Routes>
       </AuthProvider>
     </Router>
