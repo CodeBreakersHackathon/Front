@@ -1,14 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import { useStorageState } from "./util/useLocalStorage";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+  const [[_, token], setToken] = useStorageState("access_token");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Leer la cookie al cargar la página
   useEffect(() => {
-    const token = Cookies.get("access_token");
     if (token) {
       setIsLoggedIn(true); // Si hay token, el usuario está autenticado
     }
@@ -20,8 +21,11 @@ export function AuthProvider({ children }) {
 
   const logout = () => {
     setIsLoggedIn(false);
+    setToken(null)
     Cookies.remove("access_token");
   };
+
+  console.log("authorization", token)
   
   return (
     <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
