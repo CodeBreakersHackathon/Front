@@ -7,32 +7,72 @@ import { getMessage } from "../utils/util";
 import { checkoutConfig } from "../config";
 import "../culqi.css";
 import { CustomerInfo, ItemInfo } from "../config/Customer";
+import { ShoppingCartDto, ShoppingChargeDto } from "../dto/cart.dto";
+import { API_URL } from "../../apiConstants";
+import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+import { button } from "framer-motion/client";
+
+const axiosInstance = axios.create({
+    headers: {
+      "Content-Type": "application/json",
+    },
+    baseURL: import.meta.env.VITE_API_URL
+});
 
 const publicKey = import.meta.env.VITE_APP_CULQI_PUBLICKEY;
 
+async function orderCart(cart: ShoppingCartDto) {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+        throw new Error("No access token found");
+    }
+
+    return await axiosInstance.post(`${API_URL}/culqi/order-cart`, cart,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        }
+    );
+}
+
+async function chargeCart(cart: ShoppingChargeDto) {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+        throw new Error("No access token found");
+    }
+
+    return await axiosInstance.post(`${API_URL}/culqi/charge-cart`, cart,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        }
+    );;
+}
+
 interface CulqiButtonProps {
-    buttonId?: string;
+    className?: string;
     buttonTitle?: string;
     payText?: string;
+
+    activities: number[];
+
     chargeMessage: string;
-    itemInfo: ItemInfo;
-    customerInfo: CustomerInfo;
-    total_amount: number;
-    expiration_date: any;
     setChargeMessage: (value: string) => void;
 }
 
-export function CulqiButton(props: CulqiButtonProps) {
+export function Culqi(props: CulqiButtonProps) {
     const [CulqiCheckout, setCulqiCheckout] = useState<any>(null);
+    const [amount, setAmount] = useState<number>(0);
+    const [expiration, setExpiration] = useState<number>(-1);
+
     const Culqi3DS = useRef<any>(null);
-    const customerInfo = props.customerInfo;
-    const amount = props.total_amount;
-    const itemInfo = props.itemInfo;
-  
     const [removeMessageListener, setRemoveMessageListener] = useState(() => {});
   
     const isFirstRunOrderService = useRef(true); // Variable de referencia para rastrear la primera ejecución
-  
+
     const decive3DS = useRef(null);
     const orderId = useRef(null);
     const tokenId = useRef(null);
@@ -40,17 +80,18 @@ export function CulqiButton(props: CulqiButtonProps) {
   
     // Function to handle 3DS parameters
     const handleSuccess3DSParameters = async (parameters3DS) => {
-      const { data, status } = await createCharge({
-        customer: customerInfo,
-        total_amount: amount,
-        deviceId: decive3DS.current,
-        email: tokenEmail.current,
-        tokenId: tokenId.current,
-        parameters3DS
-      });
+      const { data, status } = await orderCart({
+        items: props.activities,
+        currency: "PEN",
+        description: "Actividades: " + props.activities.join(", "),
+        device_id: decive3DS.current,
+        authentication_3DS: parameters3DS
+      })
+      console.log("data", data)
+      console.log("status", status)
   
-      if (status === 201 && data.object === "charge") {
-        props.setChargeMessage("OPERACIÓN REALIZADA EXITOSAMENTE CON 3DS. El ID: "+ data.id);
+      if (status === 201 && data.data.object === "charge") {
+        props.setChargeMessage("OPERACIÓN REALIZADA EXITOSAMENTE CON 3DS. El ID: "+ data.data.id);
       }
       Culqi3DS.current.reset();
     };
@@ -100,14 +141,13 @@ export function CulqiButton(props: CulqiButtonProps) {
       tokenEmail.current = token.email;
   
       CulqiCheckout.close();
-      const { data, status } = await createCharge({
-        customer: customerInfo,
-        total_amount: amount,
-        deviceId: decive3DS.current,
-        email: token.email,
-        tokenId: token.id
+      const { data, status } = await chargeCart({
+        items: props.activities,
+        currency: "PEN",
+        token: token.id,
+        device_id: decive3DS.current,
       });
-      handleResponse(token.id, token.email, status, data);
+      handleResponse(token.id, token.email, status, data.data);
     };
   
     useEffect(() => {
@@ -148,33 +188,47 @@ export function CulqiButton(props: CulqiButtonProps) {
     }, []);
   
     useEffect(() => {
-      const generateOrder = async (customerInfo) => {
+      const generateOrder = async () => {
+        console.log("generateOrder", isFirstRunOrderService.current);
         isFirstRunOrderService.current = false; // Marca que ya no es la primera ejecución
-        const { data, status } = await createOrder(itemInfo, customerInfo, amount, props.expiration_date);
+        const { data, status } = await orderCart({
+            items: props.activities,
+            currency: "PEN",
+            description: "Actividades: " + props.activities,
+            device_id: decive3DS.current,
+        });
+        console.log(data)
+
+        setExpiration(data.data.expiration_date);
         if (status === 201) {
-          orderId.current = data.id;
+          orderId.current = data.data.id;
         } else {
           isFirstRunOrderService.current = true;
         }
       };
   
-      const handleCulqiCheckout = async (customerInfo) => {
+      const handleCulqiCheckout = async () => {
+        console.log("handleCulqiCheckout", isFirstRunOrderService.current);
         if (isFirstRunOrderService.current) {
-          await generateOrder(customerInfo);
+            await generateOrder();
         }
+        console.log("if id", orderId.current)
         if (orderId.current) {
+            console.log("current")
           const config = await culqiConfig({
             installments: true,
             orderId: orderId.current,
             buttonTex: props.payText ? props.payText : "Pagar",
             amount
           });
+          
           setCulqiCheckout(new culqiCustomCheckout(publicKey, config));
+          console.log("checkout", CulqiCheckout)
         }
       };
   
-      handleCulqiCheckout(customerInfo);
-    }, [orderId.current]);
+      handleCulqiCheckout();
+    }, [orderId.current, props.activities, amount]); // Add orderId.current to the dependency array
   
     const openCheckout = async () => {
       CulqiCheckout.open()
@@ -190,8 +244,16 @@ export function CulqiButton(props: CulqiButtonProps) {
     };
 
   return (
-    <button onClick={openCheckout} id={props.buttonId ? props.buttonId : "crearCharge"}>
-      {props.buttonTitle ? props.buttonTitle : "Crear Cargo"}
-    </button>
+    <div>
+    <motion.button
+      onClick={openCheckout}
+      className={props.className}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      disabled={props.activities.length === 0}
+    >
+        {props.buttonTitle ? props.buttonTitle : "Pagar"}
+    </motion.button>
+    </div>
   );
 }
