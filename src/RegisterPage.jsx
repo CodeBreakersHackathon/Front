@@ -158,7 +158,7 @@ function RegisterPage() {
               <div className="input-wrapper">
                 {field.icon}
                 <input
-                  type={field.name.includes("password") ? "password" : "text"}
+                  type={field.name.toLowerCase().includes("password") ? "password" : "text"}
                   id={field.name}
                   name={field.name}
                   placeholder={`Ingresa ${field.label.toLowerCase()}`}
