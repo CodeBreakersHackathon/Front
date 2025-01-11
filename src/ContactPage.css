@@ -101,3 +101,112 @@
     margin-bottom: 10px;
   }
   
+  /* --------------------------------------------------------------------------------  */
+
+  /* Contenedor principal */
+.perfil-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+}
+
+/* Contenido principal */
+.perfil-main {
+  max-width: 900px;
+  width: 100%;
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.perfil-picture {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #00796b;
+}
+
+.perfil-header h1 {
+  font-size: 1.8rem;
+  color: #333;
+}
+
+/* Cursos Grid */
+.cursos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Tarjetas de cursos */
+.curso-card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.curso-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.curso-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.curso-info {
+  padding: 15px;
+}
+
+.curso-info h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.curso-info p {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.curso-meta {
+  font-size: 0.8rem;
+  color: #777;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-inscribirse {
+  background-color: #00796b;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.btn-inscribirse:hover {
+  background-color: #005f4b;
+}
