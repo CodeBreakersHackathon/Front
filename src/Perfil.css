@@ -1,0 +1,90 @@
+/* Contenedor principal */
+.perfil-container {
+    display: flex;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+  }
+  
+  /* Barra lateral */
+  .perfil-sidebar {
+    width: 250px;
+    background-color: #ffffff;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+  }
+  
+  .perfil-sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .perfil-sidebar li {
+    padding: 10px 15px;
+    color: #555;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .perfil-sidebar li:hover,
+  .perfil-sidebar .active {
+    background-color: #e0f7fa;
+    color: #00796b;
+  }
+  
+  /* Contenido principal */
+  .perfil-main {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .perfil-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .perfil-picture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #00796b;
+  }
+  
+  .perfil-header h1 {
+    font-size: 1.8rem;
+    color: #333;
+  }
+  
+  /* Secciones de detalles */
+  .perfil-details h2 {
+    font-size: 1.2rem;
+    color: #00796b;
+    margin-bottom: 8px;
+  }
+  
+  .perfil-details p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  /* Botón editar */
+  .perfil-edit-btn {
+    display: inline-block;
+    background-color: #00796b;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .perfil-edit-btn:hover {
+    background-color: #005f4b;
+  }
+  

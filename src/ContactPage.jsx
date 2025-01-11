@@ -92,6 +92,79 @@ function ContactPage() {
           <li>📍 Dirección: Lima, Perú</li>
         </motion.ul>
       </section>
+
+      {/* Perfil Section */}
+<section className="perfil-section">
+  <div className="perfil-container">
+    <main className="perfil-main">
+      <div className="perfil-header">
+        <img
+          src="/path/to/profile-picture.jpg"
+          alt="Profile"
+          className="perfil-picture"
+        />
+        <h1>
+          Ashly Veliz Barba
+        </h1>
+      </div>
+      <section className="perfil-details">
+        <h2>Rol</h2>
+        <p>Estudiante</p>
+
+        <h2>Cursos</h2>
+        <div className="cursos-grid">
+          {/* Aquí los cursos se mostrarán en tarjetas */}
+          {[
+            {
+              id: 1,
+              name: "Innovación en la Enseñanza Digital",
+              description: "Descubre las últimas tendencias en educación digital.",
+              image: "/images/curso1.jpg",
+              date: "15 Marzo 2024",
+              participants: 150,
+            },
+            {
+              id: 2,
+              name: "Programación en React",
+              description: "Domina los fundamentos del desarrollo frontend.",
+              image: "/images/curso2.jpg",
+              date: "20 Abril 2024",
+              participants: 200,
+            },
+          ].map((curso) => (
+            <div key={curso.id} className="curso-card">
+              <img
+                src={curso.image || "/path/to/default-course-image.jpg"}
+                alt={curso.name}
+                className="curso-image"
+              />
+              <div className="curso-info">
+                <h3>{curso.name}</h3>
+                <p>{curso.description}</p>
+                <div className="curso-meta">
+                  <span>📅 {curso.date}</span>
+                  <span>👥 {curso.participants} participantes</span>
+                </div>
+                <button
+                  className="btn-inscribirse"
+                  onClick={() => alert(`Ver más de ${curso.name}`)}
+                >
+                  Ver Curso
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
+  </div>
+</section>
+
+
+
+
+
+
     </div>
   );
 }
