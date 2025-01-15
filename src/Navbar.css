@@ -86,6 +86,7 @@ body, html {
 .btn-iniciar-sesion,
 .btn-registrarse,
 .btn-ver-clases,
+.btn-crearEvento,
 .btn-mis-cursos,
 .btn-ver-perfil,
 .btn-cerrar-sesion {
@@ -129,6 +130,7 @@ body, html {
 
 /* Botones estilo terciario (semi-transparente) */
 .btn-ver-clases,
+.btn-crearEvento,
 .btn-mis-cursos {
   background-color: rgba(255, 255, 255, 0.1);
   color: var(--white);
@@ -136,6 +138,7 @@ body, html {
 }
 
 .btn-ver-clases:hover,
+.btn-crearEvento:hover,
 .btn-mis-cursos:hover {
   background-color: var(--white);
   color: var(--secondary-blue);
@@ -146,6 +149,7 @@ body, html {
 .btn-iniciar-sesion:active,
 .btn-registrarse:active,
 .btn-ver-clases:active,
+.btn-crearEvento:active,
 .btn-mis-cursos:active,
 .btn-ver-perfil:active,
 .btn-cerrar-sesion:active {
@@ -190,6 +194,7 @@ body, html {
   .btn-iniciar-sesion,
   .btn-registrarse,
   .btn-ver-clases,
+  .btn-crearEvento,
   .btn-mis-cursos,
   .btn-ver-perfil,
   .btn-cerrar-sesion {
@@ -203,3 +208,6 @@ body, html {
     display: none; /* O implementar menú hamburguesa */
   }
 }
+
+
+

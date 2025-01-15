@@ -36,6 +36,7 @@ import EventosPage from "./EventosPage"; // Importar página de eventos
 import RoomLiveStream from "./RoomLiveStream"; // Importar página de eventos
 import PerfilPage from "./PerfilPage.jsx";
 
+import Event from "./CreateEvent.jsx";
 
 
 function App() {
@@ -90,6 +91,9 @@ function App() {
           <Route path="/crear-evento" element={<CrearEvento />} />
 
           <Route path="/RoomLiveStream" element={<RoomLiveStream/>}/>
+
+          <Route path="/create-event" element={<Event />} />
+
         </Routes>
       </AuthProvider>
     </Router>

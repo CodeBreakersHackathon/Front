@@ -6,29 +6,49 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [[_, token], setToken] = useStorageState("access_token");
+  const [[__, userData], setUserData] = useStorageState("userData");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null);
 
-  // Leer la cookie al cargar la página
   useEffect(() => {
     if (token) {
-      setIsLoggedIn(true); // Si hay token, el usuario está autenticado
+      setIsLoggedIn(true);
+      try {
+        const tokenParts = token.split('.');
+        const tokenPayload = JSON.parse(atob(tokenParts[1]));
+        setUserRole(tokenPayload.role);
+      } catch (error) {
+        console.error("Error al decodificar el token:", error);
+      }
     }
   }, [token]);
 
-  const login = () => {
+  const login = (newToken) => {
     setIsLoggedIn(true);
+    setToken(newToken);
+    try {
+      const tokenParts = newToken.split('.');
+      const tokenPayload = JSON.parse(atob(tokenParts[1]));
+      setUserRole(tokenPayload.role);
+    } catch (error) {
+      console.error("Error al decodificar el token:", error);
+    }
   };
 
   const logout = () => {
     setIsLoggedIn(false);
-    setToken(null)
+    setUserRole(null);
+    setToken(null);
+    setUserData(null);
+    localStorage.removeItem("userData");
     Cookies.remove("access_token");
   };
 
-  console.log("authorization", token)
+  console.log("authorization", token);
+  console.log("user role", userRole);
   
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, userRole, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

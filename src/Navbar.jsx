@@ -3,30 +3,30 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import "./Navbar.css";
 import logo from "./assets/logo/logo2.png";
+import CrearEvento from "./CrearEvento";
 
 // Función para decodificar el JWT
 const decodeJWT = (token) => {
   if (!token) return null;
   const payload = token.split('.')[1];
-  const decoded = JSON.parse(atob(payload)); // Decodifica y parsea el payload
-  return decoded; // Retorna el payload decodificado
+  const decoded = JSON.parse(atob(payload));
+  return decoded;
 };
 
 function Navbar() {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, userRole } = useAuth(); // Añadimos userRole del contexto
   const navigate = useNavigate();
-  const [userId, setUserId] = useState(null); // Estado para almacenar el userId
+  const [userId, setUserId] = useState(null);
 
-  // Efecto para obtener el userId desde el localStorage
   useEffect(() => {
     const userDataFromLocalStorage = localStorage.getItem("userData");
 
     if (userDataFromLocalStorage && userDataFromLocalStorage !== "undefined") {
       try {
         const parsedData = JSON.parse(userDataFromLocalStorage);
-        const decodedToken = decodeJWT(parsedData.access_token); // Decodifica el token
+        const decodedToken = decodeJWT(parsedData.access_token);
         if (decodedToken && decodedToken.sub) {
-          setUserId(decodedToken.sub); // Establece el userId
+          setUserId(decodedToken.sub);
         }
       } catch (error) {
         console.error(
@@ -38,25 +38,29 @@ function Navbar() {
   }, []);
 
   const handleLogout = () => {
-    logout(); // Llamamos al método de logout
-    navigate("/"); // Redirigimos a la página principal (home)
+    logout();
+    navigate("/");
   };
 
   const goToMisCursos = () => {
     if (userId) {
-      navigate(`/tickets/user/${userId}/courses`); // Si el userId está disponible, redirige a "Mis Cursos"
+      navigate(`/tickets/user/${userId}/courses`);
     } else {
-      alert("Debes iniciar sesión para acceder a tus cursos."); // Muestra un mensaje si no hay userId
+      alert("Debes iniciar sesión para acceder a tus cursos.");
     }
   };
 
   const goToMisClases = () => {
-    navigate(`/course`); //redirige a "Mis Clases"
+    navigate(`/course`);
   };
+  
   const goToPerfil = () => {
-    navigate(`/profile`); // redirige a "Mi Perfil"
+    navigate(`/profile`);
   };
 
+  const goToCalificar = () => {
+    navigate('/calificar'); // Nueva función para el botón de calificar
+  };
 
   return (
     <nav className="barra-navegacion">
@@ -101,11 +105,15 @@ function Navbar() {
             <button onClick={goToPerfil} className="btn-ver-perfil">
               Ver Perfil
             </button>
+            {/* Botón que solo aparece para profesores */}
+            {userRole === 'professor' && (
+              <button onClick={CrearEvento} className="btn-crearEvento">
+                Crear Evento
+              </button>
+            )}
             <button onClick={handleLogout} className="btn-cerrar-sesion">
               Cerrar Sesión
             </button>
-
-            
           </>
         ) : (
           <>

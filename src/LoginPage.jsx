@@ -62,17 +62,22 @@ function LoginPage() {
         const tokenParts = access_token.split('.');
         const tokenPayload = JSON.parse(atob(tokenParts[1]));
         const userId = tokenPayload.sub;
+        const userRole = tokenPayload.role;
+  
+        console.log("Role del usuario:", userRole);
   
         const userData = {
           access_token,
           userId,
+          role: userRole
         };
   
         localStorage.setItem("access_token", access_token);
         localStorage.setItem("userData", JSON.stringify(userData));
         Cookies.set("access_token", access_token);
   
-        login();
+        login(access_token); // Pasamos el token completo a login
+        
         setAlert({
           show: true,
           message: "¡Inicio de sesión exitoso!",
@@ -92,7 +97,7 @@ function LoginPage() {
         message: error.message,
         type: "error"
       });
-
+  
       setTimeout(() => {
         setAlert({ show: false, message: "", type: "" });
       }, 3000);
