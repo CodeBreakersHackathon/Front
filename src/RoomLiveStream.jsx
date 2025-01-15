@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import './RoomLiveStream.css';
-import { API_URL } from './apiConstants';
 
 const RoomLiveStream = () => {
   const [peers, setPeers] = useState({});
@@ -99,9 +98,7 @@ const RoomLiveStream = () => {
   const startRecording = () => {
     if (screenStream.current) {
       recordedChunks.current = [];
-      mediaRecorder.current = new MediaRecorder(screenStream.current, {
-        mimeType: 'video/webm; codecs=vp8', // Ajusta el tipo MIME según lo que necesites
-      });
+      mediaRecorder.current = new MediaRecorder(screenStream.current, { mimeType: 'video/webm; codecs=vp9' });
   
       mediaRecorder.current.ondataavailable = (event) => {
         if (event.data.size > 0) {
@@ -112,23 +109,19 @@ const RoomLiveStream = () => {
       mediaRecorder.current.onstop = () => {
         const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
         const url = URL.createObjectURL(blob);
-  
-        // Descarga el archivo automáticamente
         const a = document.createElement('a');
-        a.style.display = 'none';
         a.href = url;
-        a.download = 'recording.webm';
-        document.body.appendChild(a);
+        a.download = 'screen-recording.mkv'; 
         a.click();
-        URL.revokeObjectURL(url);
       };
   
       mediaRecorder.current.start();
       setIsRecording(true);
     } else {
-      console.error('No hay flujo de pantalla disponible para grabar');
+      console.error("No screen stream available for recording.");
     }
   };
+  
 
   const stopRecording = () => {
     if (mediaRecorder.current && mediaRecorder.current.state !== 'inactive') {
@@ -258,7 +251,7 @@ const RoomLiveStream = () => {
   };
   
   useEffect(() => {
-    socket.current = io(`${API_URL}`, {
+    socket.current = io('http://localhost:3000', {
       reconnection: true,
       reconnectionDelay: 1000,
     });

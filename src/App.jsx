@@ -34,7 +34,7 @@ import VideoChat from "./VideoChat"; // Importar VideoChat
 import EventosPage from "./EventosPage"; // Importar página de eventos
 
 import RoomLiveStream from "./RoomLiveStream"; // Importar página de eventos
-import PerfilPage from "./Perfil.jsx";
+import PerfilPage from "./PerfilPage.jsx";
 
 
 

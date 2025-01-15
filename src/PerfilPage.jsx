@@ -1,5 +1,5 @@
 import React from "react";
-import "./Perfil.css";
+import "./PerfilPage.css";
 import { API_URL } from "./apiConstants";
 
 export function PerfilPage() {
