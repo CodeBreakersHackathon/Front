@@ -71,27 +71,32 @@ function Navbar() {
       </div>
 
       <ul className="lista-navegacion">
-        <li>
-          <Link to="/" className="enlace-navegacion">
-            Inicio
-          </Link>
-        </li>
-        <li>
-          <Link to="/nosotros" className="enlace-navegacion">
-            Nosotros
-          </Link>
-        </li>
-        <li>
-          <Link to="/servicios" className="enlace-navegacion">
-            Servicios
-          </Link>
-        </li>
-        <li>
-          <Link to="/contacto" className="enlace-navegacion">
-            Contacto
-          </Link>
-        </li>
+        {!isLoggedIn && (
+          <>
+            <li>
+              <Link to="/" className="enlace-navegacion">
+                Inicio
+              </Link>
+            </li>
+            <li>
+              <Link to="/nosotros" className="enlace-navegacion">
+                Nosotros
+              </Link>
+            </li>
+            <li>
+              <Link to="/servicios" className="enlace-navegacion">
+                Servicios
+              </Link>
+            </li>
+            <li>
+              <Link to="/contacto" className="enlace-navegacion">
+                Contacto
+              </Link>
+            </li>
+          </>
+        )}
       </ul>
+
 
       <div className="botones-navegacion">
         {isLoggedIn ? (

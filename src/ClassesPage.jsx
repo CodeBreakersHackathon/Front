@@ -21,16 +21,24 @@ function ClassesPage() {
     <div className="classes-page">
       <h2>Clases Disponibles</h2>
       <ul>
-        {classes.map((classItem) => (
-          <li key={classItem.id}>
-            <h3>{classItem.name}</h3>
-            <p>{classItem.description}</p>
-            <Link to={`/course/${classItem.id}`} className="btn-detalles">
-              Ver detalles
-            </Link>
-          </li>
-        ))}
-      </ul>
+  {classes.map((classItem) => (
+    <li key={classItem.id}>
+      <img 
+        src={classItem.image_url} 
+        alt={classItem.name} 
+        style={{ width: '100%', borderRadius: '8px', marginBottom: '10px' }}
+      />
+      <h3>{classItem.name}</h3>
+      <p>{classItem.description}</p>
+      <p><strong>Duración:</strong> {classItem.duration} minutos</p>
+      <p><strong>Precio:</strong> ${classItem.price}</p>
+      <Link to={`/course/${classItem.id}`} className="btn-detalles">
+        Ver detalles
+      </Link>
+    </li>
+  ))}
+</ul>
+
     </div>
   );
 }
