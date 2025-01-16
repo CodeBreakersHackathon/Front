@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from './apiConstants';
+import './ClassView.css';
 
 const ClassView = () => {
   const { id } = useParams(); // Obtener el ID del curso desde la URL

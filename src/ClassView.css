@@ -1,26 +1,124 @@
+/* Contenedor principal */
 .class-view {
+  font-family: 'Inter', sans-serif;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #f9fbfd;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Título principal */
+.class-view h2 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-transform: capitalize;
+  border-bottom: 2px solid #ecf0f1;
+  display: inline-block;
+  padding-bottom: 10px;
+}
+
+/* Contenedor de cada clase */
+.class-item {
+  background: linear-gradient(145deg, #ffffff, #f0f2f5);
+  border-radius: 16px;
+  margin-bottom: 25px;
+  padding: 25px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #e8eaf6;
+}
+
+.class-item:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-5px);
+}
+
+/* Títulos de cada clase */
+.class-item h3 {
+  font-size: 1.8rem;
+  color: #34495e;
+  margin-bottom: 10px;
+  font-weight: 600;
+  text-transform: capitalize;
+  border-left: 4px solid #3498db;
+  padding-left: 10px;
+}
+
+/* Descripción de la clase */
+.class-item p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  line-height: 1.8;
+  margin: 10px 0;
+}
+
+/* Contenedor del video */
+.video-container {
+  margin-top: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #000;
+  position: relative;
+  border: 1px solid #d6dbdf;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo del video */
+.video-container video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Mensaje de error o estado */
+.class-view p {
+  color: #e74c3c;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+/* Botón de recursos */
+.class-item a {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 12px 20px;
+  background-color: #3498db;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.class-item a:hover {
+  background-color: #2980b9;
+  box-shadow: 0 6px 16px rgba(41, 128, 185, 0.4);
+}
+
+/* Adaptación a pantallas más pequeñas */
+@media (max-width: 768px) {
+  .class-item {
     padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
   }
-  
+
   .class-view h2 {
     font-size: 2rem;
-    color: #333;
   }
-  
-  .class-view p {
+
+  .class-item h3 {
+    font-size: 1.5rem;
+  }
+
+  .class-item p {
     font-size: 1rem;
-    color: #666;
   }
-  
-  .video-container {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  video {
-    max-width: 100%;
-    border: 2px solid #ddd;
-  }
-  
+}
