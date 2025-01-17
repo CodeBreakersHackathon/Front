@@ -17,7 +17,7 @@ import OnlyCharge from "./culqi/pages/CulqiComponents.tsx";
 import ClassView from "./ClassView";
 import MisCursos from "./MisCursos"; // Página para mostrar los cursos
 import CartPage from "./CartPage.jsx";
-import CrearEvento from "./CrearEvento.jsx";
+// import CrearEvento from "./CrearEvento.jsx";
 // import LiveUpdates from "./LiveStreamAntiguo/LiveUpdates.jsx"; // Asegúrate de que la ruta sea correcta
 // import LiveStream from './LiveStream';
 // import LiveStreamEmitter from './LiveStreamAntiguo/LiveStreamEmitter.jsx'; // Transmisor
@@ -88,11 +88,11 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/profile" element={<PerfilPage />} />
           {/* Nueva ruta para eventos */}
-          <Route path="/crear-evento" element={<CrearEvento />} />
+          {/* <Route path="/crear-evento" element={<CrearEvento />} /> */}
 
           <Route path="/RoomLiveStream" element={<RoomLiveStream/>}/>
 
-          <Route path="/create-event" element={<Event />} />
+          <Route path="/createEvent" element={<Event />} />
 
         </Routes>
       </AuthProvider>

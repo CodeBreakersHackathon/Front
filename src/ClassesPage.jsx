@@ -20,9 +20,9 @@ function ClassesPage() {
   return (
     <div className="classes-page">
       <h2>Clases Disponibles</h2>
-      <ul>
+      <ul className='clases-css'>
   {classes.map((classItem) => (
-    <li key={classItem.id}>
+    <li className="classes-li-page" key={classItem.id}>
       <img 
         src={classItem.image_url} 
         alt={classItem.name} 

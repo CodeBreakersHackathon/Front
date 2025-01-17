@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import "./Navbar.css";
 import logo from "./assets/logo/logo2.png";
-import CrearEvento from "./CrearEvento";
 
 // Función para decodificar el JWT
 const decodeJWT = (token) => {
@@ -51,6 +50,11 @@ function Navbar() {
   const goToMisClases = () => {
     navigate(`/course`);
   };
+
+
+  const createEvent = () => {
+    navigate(`/createEvent`);
+  };
   
   const goToPerfil = () => {
     navigate(`/profile`);
@@ -69,32 +73,27 @@ function Navbar() {
       </div>
 
       <ul className="lista-navegacion">
-        {!isLoggedIn && (
-          <>
-            <li>
-              <Link to="/" className="enlace-navegacion">
-                Inicio
-              </Link>
-            </li>
-            <li>
-              <Link to="/nosotros" className="enlace-navegacion">
-                Nosotros
-              </Link>
-            </li>
-            <li>
-              <Link to="/servicios" className="enlace-navegacion">
-                Servicios
-              </Link>
-            </li>
-            <li>
-              <Link to="/contacto" className="enlace-navegacion">
-                Contacto
-              </Link>
-            </li>
-          </>
-        )}
+        <li>
+          <Link to="/" className="enlace-navegacion">
+            Inicio
+          </Link>
+        </li>
+        <li>
+          <Link to="/nosotros" className="enlace-navegacion">
+            Nosotros
+          </Link>
+        </li>
+        <li>
+          <Link to="/servicios" className="enlace-navegacion">
+            Servicios
+          </Link>
+        </li>
+        <li>
+          <Link to="/contacto" className="enlace-navegacion">
+            Contacto
+          </Link>
+        </li>
       </ul>
-
 
       <div className="botones-navegacion">
         {isLoggedIn ? (
@@ -110,7 +109,7 @@ function Navbar() {
             </button>
             {/* Botón que solo aparece para profesores */}
             {userRole === 'professor' && (
-              <button onClick={CrearEvento} className="btn-crearEvento">
+              <button onClick={createEvent} className="btn-crearEvento">
                 Crear Evento
               </button>
             )}
