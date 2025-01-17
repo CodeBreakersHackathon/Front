@@ -19,12 +19,10 @@ function Navbar() {
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const userDataFromLocalStorage = localStorage.getItem("userData");
-
-    if (userDataFromLocalStorage && userDataFromLocalStorage !== "undefined") {
+    const token = localStorage.getItem("access_token");
+    if (token && token !== undefined) {
       try {
-        const parsedData = JSON.parse(userDataFromLocalStorage);
-        const decodedToken = decodeJWT(parsedData.access_token);
+        const decodedToken = decodeJWT(token);
         if (decodedToken && decodedToken.sub) {
           setUserId(decodedToken.sub);
         }
