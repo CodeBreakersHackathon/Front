@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import './RoomLiveStream.css';
+import { API_URL } from './apiConstants';
 
 const RoomLiveStream = () => {
   const [peers, setPeers] = useState({});
@@ -251,7 +252,7 @@ const RoomLiveStream = () => {
   };
   
   useEffect(() => {
-    socket.current = io('http://localhost:3000', {
+    socket.current = io(API_URL, {
       reconnection: true,
       reconnectionDelay: 1000,
     });
