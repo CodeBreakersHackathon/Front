@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./RegisterPage.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { User, Mail, Lock, Phone, MapPin, FlagIcon, House } from "lucide-react";
 import { API_URL } from "./apiConstants";
+import countryList from "react-select-country-list";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -14,12 +15,13 @@ function RegisterPage() {
     password: "",
     confirmPassword: "",
     address: "",
-    country: "",
+    country: "PE",
     city: "",
     phone: "",
   });
   const [alert, setAlert] = useState({ show: false, message: "", type: "" });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const options = countryList().getData();
 
   const images = [
     "/imagenes/1.jpg",
@@ -58,7 +60,12 @@ function RegisterPage() {
       showAlert("Las contraseñas no coinciden", "error");
       return;
     }
-  
+
+    if (!formData.address || formData.address.length < 5) {
+      showAlert("La dirección debe tener al menos 5 carácteres", "error");
+      return;
+    }
+
     try {
       const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
@@ -77,19 +84,19 @@ function RegisterPage() {
           role: "user",
         }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Error al registrar");
       }
-  
+
       showAlert("Registro exitoso", "success");
       setTimeout(() => navigate("/login"), 1500);
     } catch (error) {
       showAlert(error.message, "error");
     }
   };
-  
+
 
   return (
     <div className="register-page">
@@ -115,12 +122,12 @@ function RegisterPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          
+
         />
         <div className="register-link-box">
-        <p>¿Ya tienes una cuenta?</p>
-        <Link to="/login" className="register-link-button">Inicia sesión aquí</Link>
-      </div>
+          <p>¿Ya tienes una cuenta?</p>
+          <Link to="/login" className="register-link-button">Inicia sesión aquí</Link>
+        </div>
       </div>
 
       <motion.div
@@ -147,6 +154,7 @@ function RegisterPage() {
             { name: "city", label: "Ciudad", icon: <MapPin size={18} /> },
             { name: "phone", label: "Teléfono", icon: <Phone size={18} /> },
           ].map((field, index) => (
+
             <motion.div
               key={field.name}
               className="form-group"
@@ -157,16 +165,34 @@ function RegisterPage() {
               <label htmlFor={field.name}>{field.label}</label>
               <div className="input-wrapper">
                 {field.icon}
-                <input
-                  type={field.name.toLowerCase().includes("password") ? "password" : "text"}
-                  id={field.name}
-                  name={field.name}
-                  placeholder={`Ingresa ${field.label.toLowerCase()}`}
-                  value={formData[field.name]}
-                  onChange={handleChange}
-                  required
-                  className="input-with-icon"
-                />
+                {field.name === "country" ? (
+                  <select
+                    id={field.name}
+                    name={field.name}
+                    value={formData[field.name]}
+                    onChange={handleChange}
+                    required
+                    className="input-with-icon"
+                  >
+                    {options.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type={field.name.toLowerCase().includes("password") ? "password" : "text"}
+                    id={field.name}
+                    name={field.name}
+                    placeholder={`Ingresa ${field.label.toLowerCase()}`}
+                    value={formData[field.name]}
+                    onChange={handleChange}
+                    required
+                    className="input-with-icon"
+                  />
+                )
+                }
               </div>
             </motion.div>
           ))}
@@ -188,7 +214,7 @@ function RegisterPage() {
           transition={{ delay: 0.5 }}
         >
         </motion.p>
-        
+
       </motion.div>
     </div>
   );
