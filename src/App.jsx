@@ -29,6 +29,8 @@ import ActivitiesPage from "./ActivitiesPage.jsx";
 
 import EventDetailPage from './EventDetailPage.jsx';
 
+import PaginaEventosDetalles from './PaginaEventosDetalles.jsx';
+import PaginaCourseDetalles from './PaginaCourseDetalles.jsx';
 
 
 function App() {
@@ -73,6 +75,13 @@ function App() {
 
           <Route path="/activity/:id" element={<EventDetailPage />} />
           <Route path="/cart" element={<CartPage />} />
+
+
+
+
+          {/* De Todas las actividades a eventos y cursos por separado */}
+          <Route path="/event/:id" element={<PaginaEventosDetalles />} />
+        `<Route path="/course/:id" element={<PaginaCourseDetalles />} />
 
         </Routes>
       </AuthProvider>

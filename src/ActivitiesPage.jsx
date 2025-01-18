@@ -51,47 +51,43 @@ function ActivitiesPage() {
       </div>
 
       <ul className="clases-css">
-        {filteredActivities.map((classItem) => (
-          <li className="classes-li-page" key={classItem.id}>
+        {filteredActivities.map((activity) => (
+          <li className="classes-li-page" key={activity.id}>
             <img
-              src={classItem.pictureCoverKey}
-              alt={classItem.name}
+              src={activity.pictureCoverKey}
+              alt={activity.name}
               style={{ width: '100%', borderRadius: '8px', marginBottom: '10px' }}
             />
-            <h3>{classItem.name}</h3>
-            <p>{classItem.description}</p>
+            <h3>{activity.name}</h3>
+            <p>{activity.description}</p>
             <p>
-              <strong>Duración:</strong> {classItem.duration} minutos
+              <strong>Duración:</strong> {activity.duration} minutos
             </p>
             <p>
-              <strong>Precio:</strong> ${classItem.price}
+              <strong>Precio:</strong> ${activity.price}
             </p>
             
             {/* Solo mostrar los detalles completos para los eventos */}
-            {classItem.type === 'event' && (
+            {activity.type === 'event' && (
               <>
                 <p>
-                  <strong>Fecha del evento:</strong> {new Date(classItem.created_at).toLocaleDateString()}
+                  <strong>Fecha del evento:</strong> {new Date(activity.created_at).toLocaleDateString()}
                 </p>
                 <p>
-                  <strong>Categorías:</strong> {classItem.categories && classItem.categories.length > 0 ? activity.categories.join(', ') : 'No hay categorías disponibles'}
+                  <strong>Categorías:</strong> {activity.categories && activity.categories.length > 0 ? activity.categories.join(', ') : 'No hay categorías disponibles'}
                 </p>
                 <p>
-                  <strong>Profesores:</strong> {classItem.professors && classItem.professors.length > 0 ? activity.professors.join(', ') : 'No hay profesores asignados'}
+                  <strong>Profesores:</strong> {activity.professors && activity.professors.length > 0 ? activity.professors.join(', ') : 'No hay profesores asignados'}
                 </p>
                 <p>
-                  <strong>Tipo de evento:</strong> {classItem.type}
+                  <strong>Tipo de evento:</strong> {activity.type}
                 </p>
               </>
             )}
             
-            <Link 
-              to={classItem.type === 'course' ? `/courses/${classItem.id}` : `/event/${classItem.id}`} 
-              className="btn-detalles"
-            >
+            <Link to={`/${activity.type}/${activity.id}`} className="btn-detalles">
               Ver detalles
             </Link>
-
           </li>
         ))}
       </ul>
