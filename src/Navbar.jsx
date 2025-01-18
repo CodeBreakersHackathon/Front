@@ -60,6 +60,10 @@ function Navbar() {
     navigate(`/profile`);
   };
 
+  const goToActivities = () => {
+    navigate(`/AllActivities`);
+  };
+
   const goToCalificar = () => {
     navigate('/calificar'); // Nueva función para el botón de calificar
   };
@@ -73,31 +77,43 @@ function Navbar() {
       </div>
 
       <ul className="lista-navegacion">
-        <li>
-          <Link to="/" className="enlace-navegacion">
-            Inicio
-          </Link>
-        </li>
-        <li>
-          <Link to="/nosotros" className="enlace-navegacion">
-            Nosotros
-          </Link>
-        </li>
-        <li>
-          <Link to="/servicios" className="enlace-navegacion">
-            Servicios
-          </Link>
-        </li>
-        <li>
-          <Link to="/contacto" className="enlace-navegacion">
-            Contacto
-          </Link>
-        </li>
+        {!isLoggedIn && (
+          <>
+            <li>
+              <Link to="/" className="enlace-navegacion">
+                Inicio
+              </Link>
+            </li>
+            <li>
+              <Link to="/nosotros" className="enlace-navegacion">
+                Nosotros
+              </Link>
+            </li>
+            <li>
+              <Link to="/servicios" className="enlace-navegacion">
+                Servicios
+              </Link>
+            </li>
+            <li>
+              <Link to="/contacto" className="enlace-navegacion">
+                Contacto
+              </Link>
+            </li>
+          </>
+        )}
       </ul>
+
 
       <div className="botones-navegacion">
         {isLoggedIn ? (
           <>
+          <button onClick={() => navigate('/cartpage')} className="btn-carrito">
+  Ver Carrito
+</button>
+
+            <button onClick={goToActivities} className="btn-ver-perfil">
+              Activities
+            </button>
             <button onClick={goToMisClases} className="btn-ver-clases">
               Ver Clases
             </button>

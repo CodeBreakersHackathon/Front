@@ -38,6 +38,12 @@ import PerfilPage from "./PerfilPage.jsx";
 
 import Event from "./CreateEvent.jsx";
 
+import ActivitiesPage from "./ActivitiesPage.jsx";
+
+import EventDetailPage from './EventDetailPage.jsx';
+
+import CartPageeee from './CartPageeee.jsx';
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -93,6 +99,14 @@ function App() {
           <Route path="/RoomLiveStream" element={<RoomLiveStream/>}/>
 
           <Route path="/createEvent" element={<Event />} />
+          <Route path="/AllActivities" element={<ActivitiesPage />} />
+
+          <Route path="/activity/:id" element={<EventDetailPage />} />
+          <Route path="/cart" element={<CartPage />} />
+
+
+          <Route path="/cartpage" element={<CartPageeee />} />
+
 
         </Routes>
       </AuthProvider>

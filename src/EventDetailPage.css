@@ -1,0 +1,57 @@
+.event-detail-page {
+    width: 80%;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .event-header {
+    display: flex;
+    margin-bottom: 40px;
+  }
+  
+  .event-image {
+    width: 40%;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+  
+  .event-info {
+    flex: 1;
+  }
+  
+  .event-info h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+  }
+  
+  .event-info p {
+    font-size: 1.2em;
+    margin: 10px 0;
+  }
+  
+  .event-info .event-description {
+    font-style: italic;
+    color: #555;
+  }
+  
+  .event-footer {
+    text-align: center;
+  }
+  
+  /* .btn-registrarse {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1.2em;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-registrarse:hover {
+    background-color: #45a049;
+  }
+   */
+
+  
