@@ -12,7 +12,7 @@ function ActivitiesPage() {
     fetch(`${API_URL}/activity/`)
       .then((response) => response.json())
       .then((data) => {
-        setActivities(data);
+        setActivities(data.data); // Accede a "data" para obtener las actividades
       })
       .catch((error) => console.error('Error fetching activities:', error));
   }, []);
@@ -54,7 +54,7 @@ function ActivitiesPage() {
         {filteredActivities.map((activity) => (
           <li className="classes-li-page" key={activity.id}>
             <img
-              src={activity.image_url}
+              src={activity.pictureCoverKey}
               alt={activity.name}
               style={{ width: '100%', borderRadius: '8px', marginBottom: '10px' }}
             />
@@ -71,7 +71,7 @@ function ActivitiesPage() {
             {activity.type === 'event' && (
               <>
                 <p>
-                  <strong>Fecha del evento:</strong> {new Date(activity.eventDate).toLocaleDateString()}
+                  <strong>Fecha del evento:</strong> {new Date(activity.created_at).toLocaleDateString()}
                 </p>
                 <p>
                   <strong>Categorías:</strong> {activity.categories && activity.categories.length > 0 ? activity.categories.join(', ') : 'No hay categorías disponibles'}
@@ -80,7 +80,7 @@ function ActivitiesPage() {
                   <strong>Profesores:</strong> {activity.professors && activity.professors.length > 0 ? activity.professors.join(', ') : 'No hay profesores asignados'}
                 </p>
                 <p>
-                  <strong>Tipo de evento:</strong> {activity.eventType}
+                  <strong>Tipo de evento:</strong> {activity.type}
                 </p>
               </>
             )}

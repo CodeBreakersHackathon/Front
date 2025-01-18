@@ -41,7 +41,7 @@ function Navbar() {
 
   const goToMisCursos = () => {
     if (userId) {
-      navigate(`/tickets/user/${userId}/courses`);
+      navigate(`/tickets/user/${userId}/activities`);
     } else {
       alert("Debes iniciar sesión para acceder a tus cursos.");
     }
@@ -107,9 +107,7 @@ function Navbar() {
       <div className="botones-navegacion">
         {isLoggedIn ? (
           <>
-          <button onClick={() => navigate('/cartpage')} className="btn-carrito">
-  Ver Carrito
-</button>
+
 
             <button onClick={goToActivities} className="btn-ver-perfil">
               Activities
