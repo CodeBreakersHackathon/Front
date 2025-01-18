@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './ClassesPage.css';
+import './ActivitiesPage.css';
 import { API_URL } from './apiConstants';
 
 function ActivitiesPage() {
