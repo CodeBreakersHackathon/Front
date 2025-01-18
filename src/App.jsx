@@ -56,7 +56,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/course" element={<ClassesPage />} />{" "}
           {/* Ruta de clases */}
-          <Route path="/course/:id" element={<ClassDetails />} />
+          <Route path="/courses/:id" element={<ClassDetails />} />
           {/* Ruta para los detalles de la clase */}
           <Route path="/tickets/user/:userId/activities" element={<MisCursos />} />
           {/* <Route path="/mis-clases" element={<MyClassesPage />} /> */}
@@ -73,9 +73,6 @@ function App() {
 
           <Route path="/activity/:id" element={<EventDetailPage />} />
           <Route path="/cart" element={<CartPage />} />
-
-
-
 
         </Routes>
       </AuthProvider>
