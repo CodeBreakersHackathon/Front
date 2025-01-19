@@ -40,10 +40,29 @@ function Navbar() {
   };
 
   const goToMisCursos = () => {
-    if (userId) {
-      navigate(`/tickets/user/${userId}/activities`);
-    } else {
+    const token = localStorage.getItem("access_token");
+    const userDataString = localStorage.getItem("userData");
+    
+    if (!token || !userDataString) {
       alert("Debes iniciar sesión para acceder a tus cursos.");
+      navigate('/login');
+      return;
+    }
+  
+    try {
+      const userData = JSON.parse(userDataString);
+      const userId = userData.userId;
+      
+      if (userId) {
+        navigate(`/tickets/user/${userId}/activities`, { state: { token } });
+      } else {
+        alert("Error al obtener información del usuario");
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error("Error al procesar datos del usuario:", error);
+      alert("Error al procesar la información del usuario");
+      navigate('/login');
     }
   };
 
