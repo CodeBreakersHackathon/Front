@@ -1,38 +1,46 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Upload, Users, Clock, CurrencyIcon, Type as TypeIcon, MapIcon } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
+import { useNavigate } from 'react-router-dom';
 import "./CrearEvento.css";
 import { API_URL } from './apiConstants';
 
-const ACTIVITY_TYPES = [ "Curso", "Evento" ];
-
-// Tipos de evento
-const EVENT_TYPES = [ 'Presencial', 'En vivo', 'Grabado' ];
-
-const CATEGORIES = [
-  'Tecnología',
-  'Diseño',
-  'Marketing',
-  'Negocios',
-  'Desarrollo Personal',
-  'Educación',
+// Tipos de evento según el backend
+const EVENT_TYPES = [
+  { value: 'conference', label: 'Conferencia' },
+  { value: 'workshop', label: 'Taller' },
+  { value: 'seminar', label: 'Seminario' },
+  { value: 'course', label: 'Curso' }
 ];
 
-function translateType(type) {
-  type = type.toLowerCase();
-  if (type === 'actividad') {
-    return 'actividad';
-  }
-  return type;
-}
+const useAuth = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isTeacher, setIsTeacher] = useState(false);
+  const [token, setToken] = useState(null);
+  const navigate = useNavigate();
 
-function parseType(type) {
-  if (type === 'actividad') {
-    return null;
-  }
-  return type === 'curso' ? 'course' : 'event';
-}
+  useEffect(() => {
+    const authToken = localStorage.getItem('token');
+    const userRole = localStorage.getItem('userRole');
+    
+    if (!authToken) {
+      navigate('/login');
+      return;
+    }
+
+    setToken(authToken);
+    setIsAuthenticated(true);
+    setIsTeacher(userRole === 'teacher');
+    
+    if (userRole !== 'professor') {
+      alert('Solo los profesores pueden crear eventos');
+      navigate('/dashboard');
+    }
+  }, [navigate]);
+
+  return { isAuthenticated, isTeacher, token };
+};
 
 const FormField = ({ label, error, children }) => (
   <motion.div
@@ -55,35 +63,30 @@ const FormField = ({ label, error, children }) => (
 );
 
 const CreateEvent = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated, isTeacher, token } = useAuth();
+  
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     price: '',
+    type: 'event',
+    eventType: 'conference',
+    location: '',
+    eventDate: new Date().toISOString().split('.')[0],
     duration: '',
-    categories: [],
-    activityType: 'actividad',
-    images: [], // Ahora soportamos múltiples imágenes
-    start_date: new Date().toISOString().split('T')[0],
-    ponentes: ''
-  });
-
-  const [eventData, setEventData] = useState({
-    eventType: 'presencial',
-    location: undefined,
-    recorded: undefined
+    record_key: '',
+    images: []
   });
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [previewImage, setPreviewImage] = useState(null);
 
   const validateForm = () => {
     const newErrors = {};
     
     if (!formData.name.trim()) {
       newErrors.name = 'El nombre es requerido';
-    } else if (formData.name.length > 70) {
-      newErrors.name = 'El nombre no debe exceder 70 caracteres';
     }
 
     if (!formData.description.trim()) {
@@ -98,70 +101,23 @@ const CreateEvent = () => {
       newErrors.duration = 'La duración mínima es de 15 minutos';
     }
 
-    if (!formData.ponentes.trim()) {
-      newErrors.ponentes = 'Ingresa al menos un ponente';
+    if (!formData.location.trim()) {
+      newErrors.location = 'La ubicación es requerida';
     }
 
-    if (!formData.activityType.trim() || formData.activityType.trim() === 'actividad') {
-      newErrors.activityType = 'La publicación debe ser un curso o evento';
-    }
-
-    if (formData.activityType.trim() == 'evento' && !formData.type.trim()) {
-      newErrors.type = 'El tipo de evento es requerido';
+    if (!formData.eventDate) {
+      newErrors.eventDate = 'La fecha del evento es requerida';
     }
 
     return newErrors;
   };
 
   const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
-    
-    if (type === 'file' && files[0]) {
-      const file = files[0];
-      if (file.type.startsWith('image/')) {
-        const imageUrl = URL.createObjectURL(file);
-        setPreviewImage(imageUrl);
-        setFormData(prev => ({
-          ...prev,
-          image_url: file
-        }));
-      } else {
-        setErrors(prev => ({
-          ...prev,
-          image_url: 'Por favor, sube solo archivos de imagen'
-        }));
-      }
-      return;
-    }
-
-    console.log(name, value);
-    if (name === 'eventType' || name === 'location' || name === 'recorded') {
-      console.log("evento")
-      if (name == 'eventType') {
-        if (value === 'presencial') {
-          setEventData(prev => ({
-            ...prev,
-            recorded: undefined
-          }));
-        } else if (value === 'grabado') {
-          setEventData(prev => ({
-            ...prev,
-            location: undefined
-          }));
-        }
-      }
-
-      setEventData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    } else {
-      console.log("normal")
-      setFormData(prev => ({
+    const { name, value } = e.target;
+    setFormData(prev => ({
       ...prev,
       [name]: value
-      }));
-    }
+    }));
 
     if (errors[name]) {
       setErrors(prev => ({
@@ -183,25 +139,15 @@ const CreateEvent = () => {
     }));
   }, []);
 
-  const fileDrop = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
       'image/*': ['.jpeg', '.jpg', '.png', '.webp']
     },
     maxFiles: 5,
-    maxSize: 5242880 // 5MB
-  });
-  
-  const videoDrop = useDropzone({
-    onDrop,
-    accept: {
-      'video/*': ['.mp4', '.avi', '.mov', '.mkv']
-    },
-    maxFiles: 1,
-    maxSize: 8.59e+9 // 8 GB
+    maxSize: 5242880
   });
 
-  // Modificar la sección de precio para usar soles
   const formatPrice = (value) => {
     if (!value) return '';
     return value.replace(/[^0-9.]/g, '');
@@ -209,8 +155,14 @@ const CreateEvent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newErrors = validateForm();
+    
+    if (!isAuthenticated || !isTeacher) {
+      alert('Debes iniciar sesión como profesor para crear eventos');
+      navigate('/login');
+      return;
+    }
 
+    const newErrors = validateForm();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -218,55 +170,75 @@ const CreateEvent = () => {
 
     setIsSubmitting(true);
     try {
-      // Aquí iría tu lógica de envío al backend
-      const formDataToSend = new FormData();
-      Object.keys(formData).forEach(key => {
-        if (key === 'image_url' && formData[key]) {
-          formDataToSend.append('image', formData[key]);
-        } else {
-          formDataToSend.append(key, formData[key]);
-        }
-      });
-      
-      const completeData = formData.activityType == 'evento' 
-      ? {...formData, ...eventData} 
-      : formData;
+      const eventPayload = {
+        name: formData.name,
+        description: formData.description,
+        price: parseFloat(formData.price),
+        type: formData.type,
+        eventType: formData.eventType,
+        location: formData.location,
+        eventDate: new Date(formData.eventDate).toISOString(),
+        duration: parseInt(formData.duration),
+        record_key: formData.record_key || undefined
+      };
 
-      // Simular envío
-      await fetch(`${API_URL}/${activityType}`, 
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          body: JSON.stringify(completeData),
-        }
-      );
-      console.log('Datos del formulario:', Object.fromEntries(formDataToSend));
-      
-      // Mostrar mensaje de éxito
-      alert('Evento creado con éxito');
-      
-      // Limpiar formulario
-      setFormData({
-        name: '',
-        description: '',
-        price: '',
-        duration: '',
-        type: '0',
-        categories: [],
-        images: [], // Ahora soportamos múltiples imágenes
-        start_date: new Date().toISOString().split('T')[0],
-        ponentes: ''
+      // Upload images if any exist
+      if (formData.images.length > 0) {
+        const imageUploadPromises = formData.images.map(async (image) => {
+          const imageFormData = new FormData();
+          imageFormData.append('image', image.file);
+          
+          const response = await fetch(`${API_URL}/upload`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: imageFormData,
+          });
+          
+          const data = await response.json();
+          return data.imageUrl;
+        });
+
+        const imageUrls = await Promise.all(imageUploadPromises);
+        eventPayload.images = imageUrls;
+      }
+
+      const response = await fetch(`${API_URL}/activity`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(eventPayload),
       });
-      setPreviewImage(null);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error creating event');
+      }
+
+      const data = await response.json();
+      alert('Evento creado con éxito');
+      navigate('/dashboard');
+
     } catch (error) {
       console.error('Error al crear el evento:', error);
+      if (error.message.includes('401')) {
+        alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+        navigate('/login');
+      } else {
+        alert('Error al crear el evento. Por favor, intente nuevamente.');
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  // No renderizar nada si no está autenticado o no es profesor
+  if (!isAuthenticated || !isTeacher) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 px-4 sm:px-6 lg:px-8">
@@ -278,15 +250,12 @@ const CreateEvent = () => {
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="bg-blue-600 px-6 py-8">
             <h1 className="text-3xl font-bold text-white text-center">
-              Nueva publicación
+              Nuevo Evento
             </h1>
-            <p className="mt-2 text-blue text-center"> {/* Cambiado de text-blue-100 a text-blue-50 */}
-              Completa los detalles para publicar tu evento
-            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="px-6 py-8 space-y-6">
-            <FormField label={<span className="text-gray-900 dark:text-gray-100">Nombre del evento</span>} error={errors.name}>
+            <FormField label="Nombre del evento" error={errors.name}>
               <div className="relative">
                 <input
                   type="text"
@@ -295,11 +264,7 @@ const CreateEvent = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   placeholder="Ej: Masterclass de Desarrollo Web 2024"
-                  maxLength={70}
                 />
-                <span className="absolute right-2 top-3 text-sm text-gray-400">
-                  {formData.name.length}/70
-                </span>
               </div>
             </FormField>
 
@@ -344,7 +309,6 @@ const CreateEvent = () => {
                     type="number"
                     name="duration"
                     min="15"
-                    step="15"
                     value={formData.duration}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -354,120 +318,57 @@ const CreateEvent = () => {
               </FormField>
             </div>
 
-            <FormField label="Tipo de publicación" error={errors.type}>
-              <div className="relative">
-                <TypeIcon className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                <select
-                  name="activityType"
-                  value={formData.activityType}
-                  defaultValue={undefined}
-                  onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white select-input"
-                >
-                  {ACTIVITY_TYPES.map(type => (
-                    <option key={type.toLowerCase()} value={type.toLowerCase()} className="text-gray-900 dark:text-white bg-white dark:bg-gray-800">
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </FormField>
-
-            {formData.activityType === 'evento' && (<>
-
-            <FormField label="Tipo de evento" error={errors.type}>
+            <FormField label="Tipo de evento" error={errors.eventType}>
               <div className="relative">
                 <TypeIcon className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                 <select
                   name="eventType"
-                  value={eventData.eventType}
+                  value={formData.eventType}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white select-input"
+                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                 >
                   {EVENT_TYPES.map(type => (
-                    <option key={type.toLowerCase()} value={type.toLowerCase()} className="text-gray-900 dark:text-white bg-white dark:bg-gray-800">
-                      {type}
+                    <option key={type.value} value={type.value}>
+                      {type.label}
                     </option>
                   ))}
                 </select>
               </div>
             </FormField>
 
-            {(eventData.eventType === 'presencial' || eventData.eventType === 'en vivo') && (
-            <FormField label={`Ubicación del evento ${eventData.eventType === 'en vivo' ? "(opcional)" : ""}`} error={errors.location}>
+            <FormField label="Ubicación" error={errors.location}>
               <div className="relative">
                 <MapIcon className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                 <input
                   type="text"
                   name="location"
-                  value={eventData.location}
+                  value={formData.location}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white select-input"
-                  placeholder="Ej: Barranco, Lima, Lima Metropolitana"
-                >
-                </input>
-              </div>
-            </FormField>
-            )}
-
-             {eventData.eventType === 'grabado' && (
-            <FormField label={`Grabación del evento`} error={errors.recorded}>
-            <div 
-                {...videoDrop.getRootProps()} 
-                className={`dropzone-area ${videoDrop.isVDragActive ? 'active' : ''}`}
-              >
-                <input {...videoDrop.getInputProps()} />
-                <div className="dropzone-content">
-                  <Upload className="h-12 w-12 text-gray-400" />
-                  <p>Arrastra la grabación del evento aquí</p>
-                  <p className="text-sm text-gray-500">Máximo un vídeo (8 GB)</p>
-                </div>
-              </div>
-              {eventData.recorded && (
-                <div className="image-preview-grid">
-                  <div key={index} className="image-preview-item">
-                      <img src={image.preview} alt={`Preview ${index + 1}`} />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setEventData(prev => ({
-                            ...prev,
-                            recorded: prev
-                          }));
-                        }}
-                        className="delete-image"
-                      >
-                        ×
-                      </button>
-                    </div>
-                </div>
-              )}
-            </FormField>
-            )}
-
-            </>)}
-
-
-            <FormField label="Fecha de inicio" error={errors.start_date}>
-              <div className="relative">
-                <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                <input
-                  type="datetime-local" // Cambiado de date a datetime-local
-                  name="start_date"
-                  value={formData.start_date}
-                  onChange={handleChange}
-                  min={new Date().toISOString().split('.')[0]} // Evita fechas pasadas
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 calendar-input"
+                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Ej: Av. Principal 123, Lima"
                 />
               </div>
             </FormField>
 
-            <FormField label="Imágenes del evento (máximo 5)" error={errors.images}>
+            <FormField label="Fecha y hora del evento" error={errors.eventDate}>
+              <div className="relative">
+                <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
+                <input
+                  type="datetime-local"
+                  name="eventDate"
+                  value={formData.eventDate}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+            </FormField>
+
+            <FormField label="Imágenes del evento" error={errors.images}>
               <div 
-                {...fileDrop.getRootProps()} 
-                className={`dropzone-area ${fileDrop.isDragActive ? 'active' : ''}`}
+                {...getRootProps()} 
+                className={`dropzone-area ${isDragActive ? 'active' : ''}`}
               >
-                <input {...fileDrop.getInputProps()} />
+                <input {...getInputProps()} />
                 <div className="dropzone-content">
                   <Upload className="h-12 w-12 text-gray-400" />
                   <p>Arrastra tus imágenes aquí o haz clic para seleccionar</p>
@@ -497,22 +398,6 @@ const CreateEvent = () => {
               )}
             </FormField>
 
-            <FormField label="Ponentes" error={errors.ponentes}>
-              <div className="relative">
-                <Users className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  name="ponentes"
-                  value={formData.ponentes}
-                  onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Ej: Juan Pérez, María García"
-                />
-              </div>
-              <p className="text-sm text-gray-500 mt-1">
-                Separa los nombres de los ponentes con comas
-              </p>
-            </FormField>
 
             <motion.button
               type="submit"
@@ -520,8 +405,7 @@ const CreateEvent = () => {
               className={`w-full py-3 px-4 rounded-lg text-white font-medium transition-all
                 ${isSubmitting 
                   ? 'bg-blue-400 cursor-not-allowed' 
-                  : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'
-                }
+                  : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'}
                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
               whileHover={{ scale: isSubmitting ? 1 : 1.01 }}
               whileTap={{ scale: isSubmitting ? 1 : 0.99 }}
@@ -529,10 +413,10 @@ const CreateEvent = () => {
               {isSubmitting ? (
                 <div className="flex items-center justify-center space-x-2">
                   <div className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full animate-spin" />
-                  <span>Creando {translateType(formData.activityType)}...</span>
+                  <span>Creando evento...</span>
                 </div>
               ) : (
-                `Publicar ${translateType(formData.activityType)}`
+                'Crear evento'
               )}
             </motion.button>
           </form>

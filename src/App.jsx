@@ -23,7 +23,7 @@ import EventosPage from "./EventosPage"; // Importar página de eventos
 import RoomLiveStream from "./RoomLiveStream"; // Importar página de eventos
 import PerfilPage from "./PerfilPage.jsx";
 
-import Event from "./CreateEvent.jsx";
+import CreateEventPage from "./CreateEventPage.jsx";
 
 import ActivitiesPage from "./ActivitiesPage.jsx";
 
@@ -31,6 +31,7 @@ import EventDetailPage from './EventDetailPage.jsx';
 
 import PaginaEventosDetalles from './PaginaEventosDetalles.jsx';
 import PaginaCourseDetalles from './PaginaCourseDetalles.jsx';
+import EventView from './EventView.jsx';
 
 
 function App() {
@@ -58,19 +59,28 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/course" element={<ClassesPage />} />{" "}
           {/* Ruta de clases */}
-          <Route path="/courses/:id" element={<ClassDetails />} />
+          <Route path="/classdetails/:id" element={<ClassDetails />} />
           {/* Ruta para los detalles de la clase */}
+
+
+          
           <Route path="/tickets/user/:userId/activities" element={<MisCursos />} />
           {/* <Route path="/mis-clases" element={<MyClassesPage />} /> */}
           <Route path="/class/:id/view" element={<ClassView />} />
+          <Route path="/event/:id/view" element={<EventView />} /> {/* Ruta para el evento */}
+
+
           <Route path="/eventos" element={<EventosPage />} />{" "}
           <Route path="/videochat" element={<VideoChat />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/profile" element={<PerfilPage />} />
 
           <Route path="/RoomLiveStream" element={<RoomLiveStream/>}/>
+          <Route path="/RoomLiveStream/:roomId" element={<RoomLiveStream />} />
 
-          <Route path="/createEvent" element={<Event />} />
+
+
+          <Route path="/createEvent" element={<CreateEventPage />} />
           <Route path="/AllActivities" element={<ActivitiesPage />} />
 
           <Route path="/activity/:id" element={<EventDetailPage />} />

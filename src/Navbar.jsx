@@ -51,9 +51,15 @@ function Navbar() {
     navigate(`/course`);
   };
 
-
   const createEvent = () => {
-    navigate(`/createEvent`);
+    // Obtener el token del localStorage
+    const token = localStorage.getItem("access_token");
+
+    if (token) {
+      navigate(`/createEvent`, { state: { token } });
+    } else {
+      alert("Debes iniciar sesión para crear un evento.");
+    }
   };
   
   const goToPerfil = () => {
@@ -103,12 +109,9 @@ function Navbar() {
         )}
       </ul>
 
-
       <div className="botones-navegacion">
         {isLoggedIn ? (
           <>
-
-
             <button onClick={goToActivities} className="btn-ver-perfil">
               Activities
             </button>
@@ -122,7 +125,7 @@ function Navbar() {
               Ver Perfil
             </button>
             {/* Botón que solo aparece para profesores */}
-            {userRole === 'professor' && (
+            {userRole === 'organizer' && (
               <button onClick={createEvent} className="btn-crearEvento">
                 Crear Evento
               </button>

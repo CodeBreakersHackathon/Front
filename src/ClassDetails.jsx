@@ -38,7 +38,7 @@ const ClassDetails = () => {
 
         // Llamadas a las APIs en paralelo
         const [classResponse, relatedClassesResponse] = await Promise.all([
-          axios.get(`${API_URL}/course/${id}`),
+          axios.get(`${API_URL}/activity/${id}`),
           axios.get(`${API_URL}/classes/course/${id}`),
         ]);
 

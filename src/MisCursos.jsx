@@ -73,8 +73,22 @@ const MisCursos = () => {
     fetchCursos();
   }, []); // Ya no dependemos de userId como prop
 
-  const handleVerClases = (cursoId) => {
-    navigate(`/class/${cursoId}/view`);
+  const handleVerClases = async (activityId, tipo) => {
+    if (tipo === "event") {
+      try {
+        // Realizar solicitud para obtener el eventId utilizando el activityId
+        const response = await axios.get(`${API_URL}/event/activity/${activityId}`);
+        const eventId = response.data.id; // Asumiendo que la respuesta contiene el campo id del evento
+
+        // Redirigir a la ruta del evento con el eventId
+        navigate(`/event/${eventId}/view`);
+      } catch (error) {
+        console.error("Error al obtener el ID del evento:", error);
+        setError("Hubo un error al obtener los detalles del evento.");
+      }
+    } else {
+      navigate(`/class/${activityId}/view`); // Redirigir a la ruta de la clase
+    }
   };
 
   if (loading) {
@@ -97,10 +111,10 @@ const MisCursos = () => {
               <h3>{curso.name}</h3>
               <p>{curso.description}</p>
               <button 
-                onClick={() => handleVerClases(curso.id)} 
+                onClick={() => handleVerClases(curso.id, curso.type)} // Se pasa el tipo de actividad
                 className="btn-ver-clases"
               >
-                Ver Clases
+                Ver {curso.type === "event" ? "Evento" : "Clases"}
               </button>
             </li>
           ))

@@ -2,8 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import './RoomLiveStream.css';
 import { API_URL } from './apiConstants';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const RoomLiveStream = () => {
+  const navigate = useNavigate();
+  const { roomId } = useParams();
+  
   const [peers, setPeers] = useState({});
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [roomName, setRoomName] = useState('');
@@ -29,6 +33,7 @@ const RoomLiveStream = () => {
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorder = useRef(null);
   const recordedChunks = useRef([]);
+  
 
 
   const toggleMute = () => {
@@ -134,22 +139,26 @@ const RoomLiveStream = () => {
 
 
 
-  const joinRoom = async () => {
-    if (roomName.trim() && socket.current) {
+  const joinRoom = async (roomToJoin) => {
+    const roomNameToUse = roomToJoin || roomName.trim();
+    
+    if (roomNameToUse && socket.current) {
       if (currentRoom) {
-        // Si estamos en una sala, salimos primero
         await leaveRoom();
       }
       
-      // Inicializar el stream si no existe
       if (!localStream.current) {
         await initializeMedia();
       }
 
-      // Unirse a la nueva sala
-      socket.current.emit('joinRoom', roomName.trim());
-      setCurrentRoom(roomName.trim());
+      socket.current.emit('joinRoom', roomNameToUse);
+      setCurrentRoom(roomNameToUse);
       setIsConnected(true);
+      
+      // Actualizar la URL sin recargar la página
+      if (!roomToJoin) {
+        navigate(`/RoomLiveStream/${roomNameToUse}`);
+      }
     }
   };
 
@@ -339,6 +348,13 @@ const RoomLiveStream = () => {
   }, []); // Esta dependencia vacía asegura que se registre solo una vez
   
 
+  useEffect(() => {
+    if (roomId) {
+      setRoomName(roomId);
+      joinRoom(roomId);
+    }
+  }, [roomId]);
+
   const createPeerConnection = (userId) => {
     const peerConnection = new RTCPeerConnection({
       iceServers: [
@@ -426,7 +442,7 @@ const RoomLiveStream = () => {
         />
         {!isConnected ? (
           <button
-            onClick={joinRoom}
+            onClick={() => joinRoom()}
             disabled={!roomName.trim()}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400"
           >
@@ -503,12 +519,19 @@ const RoomLiveStream = () => {
       <div className="videos-container grid grid-cols-2 gap-4">
         <div>
           <h3 className="mb-2">Local Video</h3>
-          <video 
-            ref={localVideoRef} 
-            autoPlay 
-            muted 
-            className="local-video-css w-full border border-gray-300 rounded-lg"
-          />
+          <video
+  ref={localVideoRef}
+  autoPlay
+  playsInline
+  muted
+  className="mirror-mode" // Añadir esta clase
+  style={{
+    width: "300px",
+    height: "225px",
+    objectFit: "cover",
+    borderRadius: "8px",
+  }}
+/>
 
         </div>
         {Object.entries(peers).map(([userId, stream]) => (

@@ -8,11 +8,21 @@ const ClassView = () => {
   const { id } = useParams(); // Obtener el ID del curso desde la URL
   const [classDetails, setClassDetails] = useState([]); // Estado para manejar las clases
   const [message, setMessage] = useState('');
+  const [courseId, setCourseId] = useState(null); // Estado para almacenar el ID del curso
 
   useEffect(() => {
-    // Llamar a la API para obtener las clases del curso
+    // Paso 1: Obtener el activityId usando el id del curso
     axios
-      .get(`${API_URL}/classes/course/${id}`)
+      .get(`${API_URL}/activity/${id}`)
+      .then((response) => {
+        const activityId = response.data.id; // Obtener el activityId
+        return axios.get(`${API_URL}/course/by-activity/${activityId}`); // Paso 2: Obtener el curso
+      })
+      .then((response) => {
+        const courseId = response.data.id; // Obtener el courseId
+        setCourseId(courseId); // Guardar el courseId en el estado
+        return axios.get(`${API_URL}/classes/course/${courseId}`); // Paso 3: Obtener las clases del curso
+      })
       .then((response) => {
         setClassDetails(response.data); // Guardar las clases en el estado
       })

@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './ClassesPage.css';
 import { API_URL } from './apiConstants';
 
 function ClassesPage() {
   const [classes, setClasses] = useState([]);
   const [searchTerm, setSearchTerm] = useState(''); // Estado para el texto del buscador
+  const navigate = useNavigate(); // Para redirigir
 
   useEffect(() => {
-    fetch(`${API_URL}/course/`)
+    fetch('http://localhost:3000/activity')
       .then((response) => response.json())
       .then((data) => {
-        setClasses(data);
+        // Filtramos los cursos con type === 'course'
+        const filteredCourses = data.data.filter((activity) => activity.type === 'course');
+        setClasses(filteredCourses); // Almacenamos solo los cursos
       })
       .catch((error) => console.error('Error fetching classes:', error));
   }, []);
@@ -21,25 +24,29 @@ function ClassesPage() {
     classItem.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Redirigir a la página de detalles del curso
+  const handleGoToDetails = (id) => {
+    navigate(`/classdetails/${id}`);
+  };
+
   return (
     <div className="classes-page">
       <h2>Clases Disponibles</h2>
-      
+
       {/* Campo de búsqueda */}
       <input
-  type="text"
-  placeholder="Buscar por nombre..."
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
-  className="search-input"
-/>
+        type="text"
+        placeholder="Buscar por nombre..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="search-input"
+      />
 
-      
       <ul className="clases-css">
         {filteredClasses.map((classItem) => (
           <li className="classes-li-page" key={classItem.id}>
             <img
-              src={classItem.image_url}
+              src={classItem.pictureCoverKey || 'default-image.jpg'} // Asegúrate de tener una imagen por defecto
               alt={classItem.name}
               style={{ width: '100%', borderRadius: '8px', marginBottom: '10px' }}
             />
@@ -51,9 +58,12 @@ function ClassesPage() {
             <p>
               <strong>Precio:</strong> ${classItem.price}
             </p>
-            <Link to={`/courses/${classItem.id}`} className="btn-detalles">
+            <button
+              onClick={() => handleGoToDetails(classItem.id)} // Llama a la función para redirigir
+              className="btn-detalles"
+            >
               Ver detalles
-            </Link>
+            </button>
           </li>
         ))}
       </ul>
