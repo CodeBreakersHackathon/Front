@@ -1,8 +1,9 @@
 import "./CartPage.css";
 import React, { useEffect, useState } from "react";
-import { Trash2, Info } from "lucide-react";
+import { Trash2, Info, X } from "lucide-react";
 import { useStorageState, useStorageStateList } from "./util/useLocalStorage";
 import { Culqi } from "./culqi/component/Culqi";
+import { motion, AnimatePresence } from "framer-motion";
 
 const defaultCourses = [
   {
@@ -44,6 +45,7 @@ const defaultCourses = [
 ]
 
 const CartPage = () => {
+  const [alert, setAlert] = useState({ show: false, message: "", type: "" });
   const [[b, courses], setCourses] = useStorageStateList("courses");
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -54,8 +56,6 @@ const CartPage = () => {
 
   console.log(courses)
   useEffect(
-
-
     () => {
       setTotalPrice(
         courses.reduce((total, course) => {
@@ -72,8 +72,44 @@ const CartPage = () => {
     setCourses(courses.filter((course) => course.id !== id));
   }
 
+  const handleCharge = (data) => {
+    console.log(data);
+    if (data.object === "charge") {
+      setAlert(
+        {
+          show: true,
+          message: data.outcome.user_message,
+          type: "success"
+        }
+      );
+      setTimeout(() => {
+        setAlert({ show: false, message: "", type: "" });
+      }, 3000);
+      setCourses([]);
+    }
+  }
+
   return (
     <div className="cart-page">
+      <AnimatePresence>
+        {alert.show && (
+          <motion.div
+            className={`custom-alert ${alert.type}`}
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 100, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 200, damping: 20 }}
+          >
+            <div className="alert-message">{alert.message}</div>
+            <button
+              onClick={() => setAlert({ show: false, message: "", type: "" })}
+              className="alert-close-btn"
+            >
+              <X size={18} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="left">
         <h1>Carrito</h1>
         <div className="cart-items">
@@ -84,9 +120,9 @@ const CartPage = () => {
               <p>{course.description}</p>
               <div className="cart-item-controls">
                 <Info className="cart-control"
-                      />
-                <Trash2 className="cart-control" 
-                        onClick={() => handleDelete(course.id)}/>
+                />
+                <Trash2 className="cart-control"
+                  onClick={() => handleDelete(course.id)} />
               </div>
             </div>
           ))}
@@ -107,13 +143,12 @@ const CartPage = () => {
           <div className="checkout">
             <h2>Monto Total: S/.{totalPrice.toFixed(2)}</h2>
             {!loading &&
-            <Culqi 
-            className = "checkout-button"
-            buttonTitle="Confirmar"
-            activities={courses.map((course) => course.id)}
-            chargeMessage=""
-            setChargeMessage={() => {}}
-            />}
+              <Culqi
+                className="checkout-button"
+                buttonTitle="Confirmar"
+                activities={courses.map((course) => course.id)}
+                onChargeResponse={handleCharge}
+              />}
           </div>
         </div>
       </div>
