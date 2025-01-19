@@ -1,8 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
+import emailjs from "@emailjs/browser";
 import "./ContactPage.css";
 
 function ContactPage() {
+  const [formData, setFormData] = useState({
+    nombre: "",
+    email: "",
+    mensaje: ""
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (!formData.nombre || !formData.email || !formData.mensaje) {
+        alert("Por favor, completa todos los campos.");
+        return;
+      }
+
+      await emailjs.send(
+        "service_rsy3gma",
+        "template_72ur8i9",
+        {
+          from_name: formData.nombre,
+          from_email: formData.email,
+          message: formData.mensaje
+        },
+        "EizHqLe52HpbdMVFD"
+      );
+
+      alert("¡Mensaje enviado con éxito!");
+      setFormData({ nombre: "", email: "", mensaje: "" });
+    } catch (error) {
+      console.error("Error al enviar el mensaje:", error);
+      alert("Error al enviar el mensaje. Intente nuevamente.");
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value
+    }));
+  };
+
   return (
     <div className="contact-container">
       {/* Hero Section */}
@@ -32,12 +74,15 @@ function ContactPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
+          onSubmit={handleSubmit}
         >
-          <label htmlFor="name">Nombre</label>
+          <label htmlFor="nombre">Nombre</label>
           <input
             type="text"
-            id="name"
-            name="name"
+            id="nombre"
+            name="nombre"
+            value={formData.nombre}
+            onChange={handleChange}
             placeholder="Tu nombre"
             required
           />
@@ -47,14 +92,18 @@ function ContactPage() {
             type="email"
             id="email"
             name="email"
+            value={formData.email}
+            onChange={handleChange}
             placeholder="Tu correo electrónico"
             required
           />
 
-          <label htmlFor="message">Mensaje</label>
+          <label htmlFor="mensaje">Mensaje</label>
           <textarea
-            id="message"
-            name="message"
+            id="mensaje"
+            name="mensaje"
+            value={formData.mensaje}
+            onChange={handleChange}
             rows="5"
             placeholder="Escribe tu mensaje aquí..."
             required
@@ -92,77 +141,6 @@ function ContactPage() {
           <li>📍 Dirección: Lima, Perú</li>
         </motion.ul>
       </section>
-
-      {/* Perfil Section */}
-<section className="perfil-section">
-  <div className="perfil-container">
-    <main className="perfil-main">
-      <div className="perfil-header">
-        <img
-          src="/path/to/profile-picture.jpg"
-          alt="Profile"
-          className="perfil-picture"
-        />
-        <h1>
-          Ashly Veliz Barba
-        </h1>
-      </div>
-      <section className="perfil-details">
-        <h2>Rol</h2>
-        <p>Estudiante</p>
-
-        <h2>Cursos</h2>
-        <div className="cursos-grid">
-          {/* Aquí los cursos se mostrarán en tarjetas */}
-          {[
-            {
-              id: 1,
-              name: "Innovación en la Enseñanza Digital",
-              description: "Descubre las últimas tendencias en educación digital.",
-              image: "/images/curso1.jpg",
-              date: "15 Marzo 2024",
-              participants: 150,
-            },
-            {
-              id: 2,
-              name: "Programación en React",
-              description: "Domina los fundamentos del desarrollo frontend.",
-              image: "/images/curso2.jpg",
-              date: "20 Abril 2024",
-              participants: 200,
-            },
-          ].map((curso) => (
-            <div key={curso.id} className="curso-card">
-              <img
-                src={curso.image || "/path/to/default-course-image.jpg"}
-                alt={curso.name}
-                className="curso-image"
-              />
-              <div className="curso-info">
-                <h3>{curso.name}</h3>
-                <p>{curso.description}</p>
-                <div className="curso-meta">
-                  <span>📅 {curso.date}</span>
-                  <span>👥 {curso.participants} participantes</span>
-                </div>
-                <button
-                  className="btn-inscribirse"
-                  onClick={() => alert(`Ver más de ${curso.name}`)}
-                >
-                  Ver Curso
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    </main>
-  </div>
-</section>
-
-
-
-
 
 
     </div>
