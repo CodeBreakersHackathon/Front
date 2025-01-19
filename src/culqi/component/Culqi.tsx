@@ -58,9 +58,7 @@ interface CulqiButtonProps {
     payText?: string;
 
     activities: number[];
-
-    chargeMessage: string;
-    setChargeMessage: (value: string) => void;
+    onChargeResponse: (value: any) => void;
 }
 
 export function Culqi(props: CulqiButtonProps) {
@@ -91,13 +89,15 @@ export function Culqi(props: CulqiButtonProps) {
       console.log("status", status)
   
       if (status === 201 && data.data.object === "charge") {
-        props.setChargeMessage("OPERACIÓN REALIZADA EXITOSAMENTE CON 3DS. El ID: "+ data.data.id);
+        //props.onChargeResponse()
+
+        // props.setChargeMessage("OPERACIÓN REALIZADA EXITOSAMENTE CON 3DS. El ID: "+ data.data.id);
       }
       Culqi3DS.current.reset();
     };
   
     const handleResponse = (token, email, statusCode, objResponse) => {
-      let message = "";
+      //let message = "";
       switch (statusCode) {
         case 200:
           if (objResponse.action_code === "REVIEW") {
@@ -108,20 +108,23 @@ export function Culqi(props: CulqiButtonProps) {
               amount,
               url: checkoutConfig.URL_BASE
             });
+            props.onChargeResponse(objResponse)
             return;
           }
-          message = "ERROR AL REALIZAR LA OPERACIÓN";
+          //message = "ERROR AL REALIZAR LA OPERACIÓN";
           break;
         case 201:
-          message = "OPERACIÓN EXITOSA - SIN 3DS. El ID: " + objResponse.id;
+          props.onChargeResponse(objResponse)
+          //message = "OPERACIÓN EXITOSA - SIN 3DS. El ID: " + objResponse.id;
           Culqi3DS.current.reset();
           break;
         default:
-          message = "OPERACIÓN FALLIDA - SIN 3DS";
+          //message = "OPERACIÓN FALLIDA - SIN 3DS";
+
           Culqi3DS.current.reset();
           break;
       }
-      props.setChargeMessage(message);
+      // props.setChargeMessage(message);
     };
   
     // Function to handle Culqi token
@@ -158,13 +161,10 @@ export function Culqi(props: CulqiButtonProps) {
           Culqi3DS.current
             .open()
             .then(async () => {
-              console.log("3DS GENERADO");
               const device = await Culqi3DS.current.getDevice();
               decive3DS.current = device;
             })
-            .catch((err) => {
-              console.log("error 3DS:: ", err);
-            });
+            .catch((err) => {});
         }
       };
       handleCulqi3DS();
@@ -208,13 +208,11 @@ export function Culqi(props: CulqiButtonProps) {
       };
   
       const handleCulqiCheckout = async () => {
-        console.log("handleCulqiCheckout", isFirstRunOrderService.current);
         if (isFirstRunOrderService.current) {
             await generateOrder();
         }
-        console.log("if id", orderId.current)
+        
         if (orderId.current) {
-            console.log("current")
           const config = await culqiConfig({
             installments: true,
             orderId: orderId.current,
