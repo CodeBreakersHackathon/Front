@@ -85,9 +85,13 @@ function ActivitiesPage() {
               </>
             )}
             
-            <Link to={`/${activity.type}/${activity.id}`} className="btn-detalles">
+            <Link
+              to={activity.type === 'event' ? `/event/${activity.id}` : `/classdetails/${activity.id}`}
+              className="btn-detalles"
+            >
               Ver detalles
             </Link>
+
           </li>
         ))}
       </ul>

@@ -91,7 +91,7 @@ function App() {
 
           {/* De Todas las actividades a eventos y cursos por separado */}
           <Route path="/event/:id" element={<PaginaEventosDetalles />} />
-        `<Route path="/course/:id" element={<PaginaCourseDetalles />} />
+        `<Route path="/classdetails/:id" element={<PaginaCourseDetalles />} />
 
         </Routes>
       </AuthProvider>
